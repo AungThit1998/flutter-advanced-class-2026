@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.DuoTask" parent="Theme.MaterialComponents.Light" />
+</resources>
