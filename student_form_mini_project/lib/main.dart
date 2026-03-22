@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:student_form_mini_project/storage/shared_preference_student.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:student_form_mini_project/storage/student.dart';
+import 'storage/shared_preference_student.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -23,13 +27,14 @@ void main() {
           errorStyle: TextStyle(color: Colors.brown),
         ),
       ),
-      home: Home(),
+      home: Home(sharedPreferences: sharedPreferences,),
     ),
   );
 }
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  const Home({super.key, required this.sharedPreferences});
+  final SharedPreferences sharedPreferences;
 
   @override
   State<Home> createState() => _HomeState();
@@ -37,7 +42,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String? _name, _phone, _password, _address;
-  final List<String> _hobbies = [];
   bool _reading = false;
   bool _football = false;
   String _groupValue = '';
@@ -46,7 +50,7 @@ class _HomeState extends State<Home> {
   bool _openForJob = false;
   String? _stateRegion;
   final GlobalKey<FormState> _formKey = GlobalKey();
-  final SharedPreferenceStudent _student = SharedPreferenceStudent();
+  late final SharedPreferenceStudent _student = SharedPreferenceStudent(sharedPreferences:  widget.sharedPreferences);
 
   String _info = '';
   final List<String> _stateRegions = const [
@@ -68,9 +72,21 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-  }
+    Student student = _student.getStudent();
+    _name = student.name;
+    _phone = student.phone;
+    _password = student.password;
+    _address = student.address;
+    _stateRegion = student.stateRegion;
+    _reading = student.hobbies.contains('Reading');
+    _football = student.hobbies.contains('Football');
+    _groupValue = student.gender;
+    _openForJob = student.openForJob;
 
-  //positioned
+    print(student);
+
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,6 +101,7 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextFormField(
+                    initialValue: _name,
                     validator: (str) {
                       if (str == null || str.trim().isEmpty) {
                         return 'Please Enter Your Name';
@@ -100,6 +117,7 @@ class _HomeState extends State<Home> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
+                    initialValue: _phone,
                     validator: (str) {
                       if (str == null || str.trim().length < 5) {
                         return 'Please Enter at least 5 number ';
@@ -115,6 +133,7 @@ class _HomeState extends State<Home> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
+                    initialValue: _password,
                     validator: (str) {
                       if (str == null || str.trim().length < 8) {
                         return 'Please Enter at least 8 password';
@@ -132,6 +151,7 @@ class _HomeState extends State<Home> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
+                    initialValue: _address,
                     validator: (str) {
                       if (str == null || str.trim().isEmpty) {
                         return 'Please Enter address';
@@ -150,7 +170,7 @@ class _HomeState extends State<Home> {
                   ),
                   const SizedBox(height: 10),
                   DropdownButtonFormField<String>(
-                    value: _stateRegion,
+                    initialValue: _stateRegion,
                     decoration: const InputDecoration(
                       labelText: 'Select your state/region',
                       prefixIcon: Icon(Icons.location_city),
@@ -257,7 +277,6 @@ class _HomeState extends State<Home> {
                     activeThumbColor: Colors.green,
                     inactiveThumbColor: Colors.red,
                     inactiveTrackColor: Colors.brown,
-                    activeThumbImage: AssetImage('images/clock.png'),
                     title: Text('Open for Job'),
                     value: _openForJob,
                     onChanged: (isOpen) {
@@ -289,15 +308,18 @@ class _HomeState extends State<Home> {
                                 "Gender is $_groupValue\n"
                                 "${_openForJob ? "Open for Job" : ""}";
                           });
-                          _student.saveStudent(
+                          Student student = Student(
                             name: _name ?? '',
                             phone: _phone ?? '',
                             password: _password ?? '',
                             address: _address ?? '',
                             stateRegion: _stateRegion ?? '',
-                            hobbies: hobbies().split(","),
+                            hobbies: [_football != false ? 'Football' : '', _reading != false ? 'Reading' : ''],
                             gender: _groupValue,
-                            openForJo: _openForJob,
+                            openForJob: _openForJob,
+                          );
+                          _student.saveStudent(
+                           student: student
                           );
 
                         }
