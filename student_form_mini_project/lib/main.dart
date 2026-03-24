@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:student_form_mini_project/storage/student.dart';
-import 'storage/shared_preference_student.dart';
+import 'storage/common_storage.dart';
+import 'storage/student.dart';
+//Shared Preference
+// NS user Default
+// local storage
+// session
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -77,22 +82,28 @@ class _HomeState extends State<Home> {
     _phone = student.phone;
     _password = student.password;
     _address = student.address;
-    _stateRegion = student.stateRegion;
+    if(student.stateRegion.isNotEmpty) {
+      _stateRegion = student.stateRegion;
+    }
     _reading = student.hobbies.contains('Reading');
     _football = student.hobbies.contains('Football');
     _groupValue = student.gender;
     _openForJob = student.openForJob;
-
-    print(student);
-
-
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Stack Lesson')),
+      appBar: AppBar(title: const Text('Student Form Storage'),
+      actions: [
+        IconButton(onPressed: (){
+          _student.clear();
+        }, icon: Icon(Icons.delete))
+      ],),
       body: Center(
-        child: Padding(
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: 500
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
           child: SingleChildScrollView(
             child: Form(
@@ -106,6 +117,7 @@ class _HomeState extends State<Home> {
                       if (str == null || str.trim().isEmpty) {
                         return 'Please Enter Your Name';
                       }
+                      return null;
                     },
                     onSaved: (str) {
                       _name = str;
@@ -122,6 +134,7 @@ class _HomeState extends State<Home> {
                       if (str == null || str.trim().length < 5) {
                         return 'Please Enter at least 5 number ';
                       }
+                      return null;
                     },
                     onSaved: (str) {
                       _phone = str;
@@ -138,6 +151,7 @@ class _HomeState extends State<Home> {
                       if (str == null || str.trim().length < 8) {
                         return 'Please Enter at least 8 password';
                       }
+                      return null;
                     },
                     onSaved: (str) {
                       _password = str;
@@ -156,6 +170,7 @@ class _HomeState extends State<Home> {
                       if (str == null || str.trim().isEmpty) {
                         return 'Please Enter address';
                       }
+                      return null;
                     },
                     onSaved: (str) {
                       _address = str;
@@ -244,7 +259,7 @@ class _HomeState extends State<Home> {
                               fillColor: WidgetStateProperty.resolveWith((
                                   states,
                                   ) {
-                                if (states.contains(MaterialState.selected)) {
+                                if (states.contains(WidgetState.selected)) {
                                   return Colors.indigo;
                                 }
                                 return Colors.yellow;
@@ -261,7 +276,7 @@ class _HomeState extends State<Home> {
                               fillColor: WidgetStateProperty.resolveWith((
                                   states,
                                   ) {
-                                if (states.contains(MaterialState.selected)) {
+                                if (states.contains(WidgetState.selected)) {
                                   return Colors.indigo;
                                 }
                                 return Colors.yellow;

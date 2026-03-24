@@ -39,4 +39,8 @@ class SharedPreferenceStudent {
       openForJob: sharedPreferences.getBool(_openForJob) ?? false,
     );
   }
+  void clear(){
+    sharedPreferences.clear();
+  }
+
 }
