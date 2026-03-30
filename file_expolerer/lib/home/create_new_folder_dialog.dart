@@ -2,7 +2,8 @@ import 'package:file_expolerer/file_services/file_services.dart';
 import 'package:flutter/material.dart';
 
 class CreateNewFolderDialog extends StatefulWidget {
-  const CreateNewFolderDialog({super.key});
+  const CreateNewFolderDialog({super.key,required this.currentLocation,});
+  final String currentLocation;
 
   @override
   State<CreateNewFolderDialog> createState() => _CreateNewFolderDialogState();
@@ -48,7 +49,7 @@ class _CreateNewFolderDialogState extends State<CreateNewFolderDialog> {
               ? null
               : () async{
                  await _fileServices.createFolder(
-                    newFolder.text,
+                    "${widget.currentLocation}${newFolder.text}",
                     status: (String status) {
                       ScaffoldMessenger.of(
                         context,

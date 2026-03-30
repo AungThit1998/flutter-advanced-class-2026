@@ -16,11 +16,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final FileServices _fileServices = FileServices();
   List<Directory> _currentFolderList = [];
   List<File> _currentFileList = [];
+  String _currentLocation = "";
 
   @override
   void initState() {
     super.initState();
-    _loadFileAndFolder("");
+    _loadFileAndFolder(_currentLocation);
   }
 
   @override
@@ -47,11 +48,31 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(
+            child: ListTile(
+              leading: IconButton(
+                onPressed: _currentLocation == "" ? null : () {
+                  List<String> directory = _currentLocation.split("/");
+                  directory.removeLast();
+                  _currentLocation = directory.join("/");
+                  _loadFileAndFolder(_currentLocation);
+                },
+                icon: Icon(Icons.arrow_back_ios),
+              ),
+              title: Text(_currentLocation.isEmpty ? "/" : _currentLocation),
+            ),
+          ),
           SliverList.builder(
             itemCount: _currentFolderList.length,
             itemBuilder: (context, index) {
               Directory directory = _currentFolderList[index];
+              String folderName = directory.path.split("/").last;
               return ListTile(
+                onTap: () {
+                  String folderLocation = "$_currentLocation/$folderName";
+                  _currentLocation = folderLocation;
+                  _loadFileAndFolder(folderLocation);
+                },
                 leading: Icon(Icons.folder),
                 title: Text(directory.path.split('/').last),
                 subtitle: Text(directory.statSync().changed.toString()),
@@ -84,12 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isOK = await showDialog(
       context: context,
       builder: (context) {
-        return CreateNewFolderDialog();
+        return CreateNewFolderDialog(currentLocation: "$_currentLocation/");
       },
     );
     print(isOK);
     if (isOK) {
-      _loadFileAndFolder("");
+      _loadFileAndFolder(_currentLocation);
     }
   }
 
@@ -97,11 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isOK = await showDialog(
       context: context,
       builder: (context) {
-        return CreateNewFileDialog();
+        return CreateNewFileDialog(currentLocation: '$_currentLocation/');
       },
     );
     if (isOK) {
-      _loadFileAndFolder("");
+      _loadFileAndFolder(_currentLocation);
     }
   }
 }
