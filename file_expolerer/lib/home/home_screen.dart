@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_expolerer/file_services/file_services.dart';
 import 'package:file_expolerer/home/create_new_file_dialog.dart';
 import 'package:file_expolerer/home/create_new_folder_dialog.dart';
+import 'package:file_expolerer/home/text_edit_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -51,12 +52,14 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             child: ListTile(
               leading: IconButton(
-                onPressed: _currentLocation == "" ? null : () {
-                  List<String> directory = _currentLocation.split("/");
-                  directory.removeLast();
-                  _currentLocation = directory.join("/");
-                  _loadFileAndFolder(_currentLocation);
-                },
+                onPressed: _currentLocation == ""
+                    ? null
+                    : () {
+                        List<String> directory = _currentLocation.split("/");
+                        directory.removeLast();
+                        _currentLocation = directory.join("/");
+                        _loadFileAndFolder(_currentLocation);
+                      },
                 icon: Icon(Icons.arrow_back_ios),
               ),
               title: Text(_currentLocation.isEmpty ? "/" : _currentLocation),
@@ -83,9 +86,22 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: _currentFileList.length,
             itemBuilder: (context, index) {
               File file = _currentFileList[index];
+              String fileName = file.path.split("/").last;
               return ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return TextEditScreen(
+                          currentFileLocation: '$_currentLocation/$fileName',
+                        );
+                      },
+                    ),
+                  );
+                },
                 leading: Icon(Icons.file_copy_outlined),
-                title: Text(file.path.split("/").last),
+                title: Text(fileName),
                 subtitle: Text(file.statSync().changed.toString()),
               );
             },

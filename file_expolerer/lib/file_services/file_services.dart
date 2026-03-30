@@ -61,4 +61,9 @@ class FileServices {
     final list = currentFolder.list();
     return list.where((entity) => entity is File).cast<File>().toList();
   }
+  Future<String> readFile(String fileLocation) async{
+    Directory root = await getRootDirectory();
+    File file = File('${root.path}/$fileLocation');
+    return file.readAsString();
+  }
 }
