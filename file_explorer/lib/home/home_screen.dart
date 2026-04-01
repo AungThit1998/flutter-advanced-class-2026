@@ -47,6 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             icon: Icon(Icons.note_add_outlined),
           ),
+          PopupMenuButton<ThemeMode>(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(child: Text("Light Theme")),
+                PopupMenuItem(child: Text("Dark Theme")),
+                PopupMenuItem(child: Text("System")),
+              ];
+            },
+          ),
         ],
       ),
       body: CustomScrollView(
