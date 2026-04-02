@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'home/home_screen.dart';
 
+// pre android 5 lp (permission)
+// 5 - 8 [permission]
+//8 - 10 [permission] restrict
+//
+
+//picker [SAF- FP]
+
 void main() {
   runApp(const MyApp());
 }
