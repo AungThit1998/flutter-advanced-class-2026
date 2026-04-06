@@ -1,9 +1,12 @@
 import 'package:book_library_database/const/theme/my_theme.dart';
+import 'package:book_library_database/data/library_db_service.dart';
 import 'package:flutter/material.dart';
 
 import 'view/home/home.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await LibraryDbService.createDatabase();
   runApp(const MyApp());
 }
 
