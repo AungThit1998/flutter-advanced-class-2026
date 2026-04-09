@@ -1,6 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:book_library_database/const/theme/app_theme_token.dart';
+import 'package:book_library_database/provider/author_provider.dart';
 import 'package:book_library_database/view/home/widgets/input_filed_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class AddAuthorSheet extends StatefulWidget {
   const AddAuthorSheet({super.key});
@@ -12,10 +17,19 @@ class AddAuthorSheet extends StatefulWidget {
 class _AddAuthorSheetState extends State<AddAuthorSheet> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  Uint8List? _photo;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     AppThemeTokens themeTokens = Theme.of(context).extension<AppThemeTokens>()!;
+    AuthorProvider authorProvider = Provider.of<AuthorProvider>(
+      context,
+      listen: false,
+    );
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
       decoration: BoxDecoration(
@@ -31,7 +45,7 @@ class _AddAuthorSheetState extends State<AddAuthorSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Insert Book Record",
+                "Insert Author Record",
                 style: TextStyle(
                   fontSize: 20,
                   color: themeTokens.onBackground,
@@ -67,7 +81,80 @@ class _AddAuthorSheetState extends State<AddAuthorSheet> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          TextButton(onPressed: () {}, child: Text("Upload Photo")),
+          TextButton(
+            onPressed: () async {
+              ImagePicker picker = ImagePicker();
+              XFile? file = await picker.pickImage(source: ImageSource.gallery);
+              _photo = await file?.readAsBytes();
+              if(_photo != null){
+                setState(() {
+
+                });
+              }
+            },
+            child: Text("Upload Photo"),
+          ),
+          SizedBox(height: 4,),
+          if(_photo != null)
+          Center(child: Image.memory(_photo!, width: 200, height: 200)),
+          if(_photo != null)
+            SizedBox(height: 4,),
+          InkWell(
+            onTap: () async {
+              String name = _nameController.text.trim();
+              String desc = _descController.text.trim();
+              if (name.isNotEmpty && desc.isNotEmpty) {
+                int result = await authorProvider.saveAuthor(
+                  name: name,
+                  description: desc,
+                  photo: _photo,
+                );
+                if (result > 0 && context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text("Save success")));
+                }
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text("Data not complete"),
+                      content: Text("Please enter name and desc correctly"),
+                      actions: [
+                        FilledButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("OK"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              alignment: Alignment.center,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                gradient: LinearGradient(
+                  colors: [themeTokens.primary, themeTokens.secondary],
+                ),
+              ),
+              child: Text(
+                "Save Author",
+                style: TextStyle(
+                  color: themeTokens.onPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

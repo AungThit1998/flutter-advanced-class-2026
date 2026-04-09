@@ -16,7 +16,6 @@ class LibraryDbService {
     String dbPath = "${documentDirectory.path}/$_dbName";
     _database = await openDatabase(dbPath, version: 1);
     _createAuthorTable();
-    _insertAuthor(name: "Leo T S", description: "War and Peace Author");
   }
 
   //authors
@@ -27,7 +26,7 @@ class LibraryDbService {
     );
   }
 
-  static Future<int> _insertAuthor({
+   Future<int> insertAuthor({
     required String name,
     required String description,
     Uint8List? photo,
