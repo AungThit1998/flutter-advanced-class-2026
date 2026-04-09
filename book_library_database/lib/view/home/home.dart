@@ -1,8 +1,8 @@
+import 'package:book_library_database/view/home/widgets/add_author_sheet.dart';
 import 'package:book_library_database/view/home/widgets/fab.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/bottom_nav.dart';
-
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,11 +12,34 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int _index = 0;
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      floatingActionButton: Fab(),
-      bottomNavigationBar: BottomNav(),
+    return Scaffold(
+      floatingActionButton: (_index == 0 || _index == 1)
+          ? Fab(
+              onPress: () {
+                if (_index == 1) {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) {
+                      return AddAuthorSheet();
+                    },
+                  );
+                }
+              },
+            )
+          : null,
+      body: Center(child: Text("$_index")),
+      bottomNavigationBar: BottomNav(
+        onSelected: (int index) {
+          setState(() {
+            _index = index;
+          });
+        },
+      ),
     );
   }
 }

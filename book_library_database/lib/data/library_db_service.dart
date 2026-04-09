@@ -23,7 +23,7 @@ class LibraryDbService {
   // id , name , description, photo
   static Future<void> _createAuthorTable() async {
     return _database.execute(
-      "create table if not exists $_authorTable (id integer primary key autoincrement, name text, description text, photo blob);",
+      "create table if not exists $_authorTable (id integer primary key autoincrement, name text, description text, photo blob, fav integer);",
     );
   }
 
@@ -33,7 +33,7 @@ class LibraryDbService {
     Uint8List? photo,
   }) {
     return _database.rawInsert(
-      'insert into authors (name,description,photo) values (?,?,?)',
+      'insert into authors (name,description,photo,fav) values (?,?,?,?)',
       [name, description, photo],
     );
   }
