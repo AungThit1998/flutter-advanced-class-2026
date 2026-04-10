@@ -1,3 +1,4 @@
+import 'package:book_library_database/view/home/author_page.dart';
 import 'package:book_library_database/view/home/widgets/add_author_sheet.dart';
 import 'package:book_library_database/view/home/widgets/fab.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,10 @@ class _HomeState extends State<Home> {
               },
             )
           : null,
-      body: Center(child: Text("$_index")),
+      body: switch(_index){
+        1 => AuthorPage(),
+       _=> SizedBox(),
+      },
       bottomNavigationBar: BottomNav(
         onSelected: (int index) {
           setState(() {
