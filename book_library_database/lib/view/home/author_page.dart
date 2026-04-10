@@ -2,8 +2,9 @@
 import 'dart:typed_data';
 
 import 'package:book_library_database/const/theme/app_theme_token.dart';
+import 'package:book_library_database/data/aithor_model.dart';
 import 'package:book_library_database/provider/author_provider.dart';
-import 'package:book_library_database/view/author_detail.dart';
+import 'package:book_library_database/view/home/author_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,14 +30,14 @@ class _AuthorPageState extends State<AuthorPage> {
       color: themeTokens.background,
       child: Consumer<AuthorProvider>(
         builder: (_,provider, __){
-          List<Map<String,dynamic>> authors = provider.authors;
+          List<AuthorModel> authors = provider.authors;
           return ListView.builder(
               itemCount: authors.length,
               itemBuilder: (context,position){
-                Map<String,dynamic> author = authors[position];
-                Uint8List? photo = author['photo'];
-                String name = author['name'];
-                String description = author['description'];
+                AuthorModel author = authors[position];
+                Uint8List? photo = author.photo;
+                String name = author.name;
+                String description = author.description;
                 return InkWell(
                   onTap: (){
                     Navigator.push(context,
