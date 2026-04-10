@@ -71,10 +71,9 @@ class _AuthorDetailState extends State<AuthorDetail> {
                   bool isFav = provider.isDetailFav == 1;
                   return IconButton(
                     onPressed: () {
-                      int updatedValue = isFav ? 0 : 1;
-                       authorProvider.updateFavourite(widget.authorData.id,updatedValue);
+                      provider.updateFavourite(widget.authorData.id, isFav ? 0 : 1);
                     },
-                    icon: isFav ?  Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                    icon: isFav ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
                   );
                 }
               ),

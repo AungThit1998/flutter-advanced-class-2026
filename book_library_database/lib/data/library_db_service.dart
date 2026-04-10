@@ -27,30 +27,54 @@ class LibraryDbService {
     );
   }
 
-   Future<int> insertAuthor({
+  Future<int> insertAuthor({
     required String name,
     required String description,
     Uint8List? photo,
   }) {
     return _database.rawInsert(
       'insert into authors (name,description,photo,fav) values (?,?,?,?)',
-      [name, description, photo,null],
+      [name, description, photo, null],
     );
   }
-  Future<List<AuthorModel>> getAllAuthor() async{
+
+  Future<List<AuthorModel>> getAllAuthor() async {
     final listOfMap = await _database.rawQuery("select * from $_authorTable");
-    return listOfMap.map((json){
+    return listOfMap.map((json) {
       return AuthorModel.fromJson(json);
     }).toList();
   }
-  Future<int> getFavourite(int id) async{
-    final favMap = await _database.rawQuery("select fav from authors where id = $id");
-    if(favMap.isNotEmpty){
+
+  Future<int> getFavourite(int id) async {
+    final favMap = await _database.rawQuery(
+      "select fav from $_authorTable where id = $id",
+    );
+    if (favMap.isNotEmpty) {
       return (favMap.first['fav'] as int?) ?? 0;
     }
     return 0;
   }
-  Future<int> updateFavourite(int id,int isFav) async{
-    return _database.rawUpdate("update authors set fav = $isFav where id = $id");
+
+  Future<int> updateFavourite(int id, int isFav) async {
+    return _database.rawUpdate(
+      "update $_authorTable set fav = $isFav where id = $id",
+    );
+  }
+
+  Future<int> deleteAuthor(int id) {
+    return _database.rawDelete("delete from $_authorTable where id = $id");
+  }
+
+  Future<int> updateAuthor({
+    required int id,
+    required String name,
+    required String description,
+  }) {
+    return _database.update(
+      _authorTable,
+      {"name": name, "description": description},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

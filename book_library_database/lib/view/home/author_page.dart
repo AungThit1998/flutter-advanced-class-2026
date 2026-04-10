@@ -95,7 +95,7 @@ class _AuthorPageState extends State<AuthorPage> {
 
                             }, icon: Icon(Icons.edit)),
                             IconButton(onPressed: (){
-
+                               provider.deleteAuthor(author.id);
                             }, icon: Icon(Icons.delete))
                           ],
                         )

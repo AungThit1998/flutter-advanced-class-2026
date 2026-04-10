@@ -26,15 +26,18 @@ class AuthorProvider extends ChangeNotifier{
    return count;
   }
   Future<int> updateFavourite(int id,int isFav) async{
-    int result = await  _dbService.updateFavourite(id,isFav);
-    await getFavourite(id);
-    notifyListeners();
+    final result = await  _dbService.updateFavourite(id,isFav);
+    getFavourite(id);
     return result;
   }
   Future<int> getFavourite(int id) async{
-    isDetailFav =  await _dbService.getFavourite(id);
+    isDetailFav = await _dbService.getFavourite(id);
     notifyListeners();
     return isDetailFav;
-
+  }
+  Future<int> deleteAuthor(int id)async{
+    int result = await _dbService.deleteAuthor(id);
+    getAllAuthor();
+    return result;
   }
 }
