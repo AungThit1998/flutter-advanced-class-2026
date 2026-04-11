@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'app_theme_token.dart';
 
 class MyTheme {
-  static ThemeData lightTheme(){
+  static ThemeData lightTheme() {
     return ThemeData.light().copyWith(
       colorScheme: const ColorScheme.light(
         surface: Color(0xFFF8F9FA),
@@ -14,12 +14,11 @@ class MyTheme {
         onSurfaceVariant: Color(0xFF6B7280), // For text-secondary
       ),
       scaffoldBackgroundColor: Color(0xFFF8F9FA),
-      extensions: const <ThemeExtension<dynamic>>[
-        AppThemeTokens.light,
-      ],
+      extensions: const <ThemeExtension<dynamic>>[AppThemeTokens.light],
     );
   }
-  static ThemeData darkTheme(){
+
+  static ThemeData darkTheme() {
     return ThemeData(
       useMaterial3: true,
       colorScheme: const ColorScheme.dark(
@@ -31,9 +30,7 @@ class MyTheme {
         onSurfaceVariant: Color(0xFFA0A5B1), // For text-secondary
       ),
       scaffoldBackgroundColor: Color(0xFF0F1016),
-      extensions: const <ThemeExtension<dynamic>>[
-        AppThemeTokens.dark,
-      ],
+      extensions: const <ThemeExtension<dynamic>>[AppThemeTokens.dark],
     );
   }
 }

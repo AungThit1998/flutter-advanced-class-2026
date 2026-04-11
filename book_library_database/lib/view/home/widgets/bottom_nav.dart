@@ -2,7 +2,7 @@ import 'package:book_library_database/const/theme/app_theme_token.dart';
 import 'package:flutter/material.dart';
 
 class BottomNav extends StatefulWidget {
-  const BottomNav({super.key,required this.onSelected,});
+  const BottomNav({super.key, required this.onSelected});
   final Function(int) onSelected;
 
   @override
@@ -34,7 +34,7 @@ class _BottomNavState extends State<BottomNav> {
       child: Container(
         padding: EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: themeTokens.border))
+          border: Border(top: BorderSide(color: themeTokens.border)),
         ),
         child: NavigationBar(
           selectedIndex: _selectedIndex,
@@ -67,7 +67,7 @@ class _BottomNavState extends State<BottomNav> {
     return NavigationDestination(
       icon: icon,
       selectedIcon: TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0.9,end: 1.0),
+        tween: Tween(begin: 0.9, end: 1.0),
         duration: Duration(milliseconds: 300),
         builder: (context, value, child) {
           return Transform.translate(

@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 
 import '../data/library_db_service.dart';
 
-class AuthorProvider extends ChangeNotifier{
+class AuthorProvider extends ChangeNotifier {
   final LibraryDbService _dbService = LibraryDbService();
   int isDetailFav = 0;
   List<AuthorModel> authors = [];
 
-
-  void getAllAuthor() async{
+  void getAllAuthor() async {
     authors = await _dbService.getAllAuthor();
     notifyListeners();
   }
@@ -20,22 +19,29 @@ class AuthorProvider extends ChangeNotifier{
     required String name,
     required String description,
     Uint8List? photo,
-  }) async{
-   final int count  = await _dbService.insertAuthor(name: name, description: description, photo: photo);
-   getAllAuthor();
-   return count;
+  }) async {
+    final int count = await _dbService.insertAuthor(
+      name: name,
+      description: description,
+      photo: photo,
+    );
+    getAllAuthor();
+    return count;
   }
-  Future<int> updateFavourite(int id,int isFav) async{
-    final result = await  _dbService.updateFavourite(id,isFav);
+
+  Future<int> updateFavourite(int id, int isFav) async {
+    final result = await _dbService.updateFavourite(id, isFav);
     getFavourite(id);
     return result;
   }
-  Future<int> getFavourite(int id) async{
+
+  Future<int> getFavourite(int id) async {
     isDetailFav = await _dbService.getFavourite(id);
     notifyListeners();
     return isDetailFav;
   }
-  Future<int> deleteAuthor(int id)async{
+
+  Future<int> deleteAuthor(int id) async {
     int result = await _dbService.deleteAuthor(id);
     getAllAuthor();
     return result;

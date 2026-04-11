@@ -33,9 +33,9 @@ class _HomeState extends State<Home> {
               },
             )
           : null,
-      body: switch(_index){
+      body: switch (_index) {
         1 => AuthorPage(),
-       _=> SizedBox(),
+        _ => SizedBox(),
       },
       bottomNavigationBar: BottomNav(
         onSelected: (int index) {

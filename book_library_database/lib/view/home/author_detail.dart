@@ -19,14 +19,18 @@ class _AuthorDetailState extends State<AuthorDetail> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      Provider.of<AuthorProvider>(context,listen: false).getFavourite(widget.authorData.id);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AuthorProvider>(
+        context,
+        listen: false,
+      ).getFavourite(widget.authorData.id);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     AppThemeTokens themeTokens = Theme.of(context).extension<AppThemeTokens>()!;
-    AuthorProvider authorProvider = Provider.of(context,listen: false);
+    AuthorProvider authorProvider = Provider.of(context, listen: false);
     AuthorModel author = widget.authorData;
     String name = author.name;
     String description = author.description;
@@ -36,7 +40,12 @@ class _AuthorDetailState extends State<AuthorDetail> {
         clipBehavior: Clip.none,
         children: [
           photo != null
-              ? Image.memory(photo, height: 350, fit: BoxFit.cover,width: double.infinity,)
+              ? Image.memory(
+                  photo,
+                  height: 350,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                )
               : Container(color: themeTokens.background, height: 350),
           Positioned(
             top: 50,
@@ -67,15 +76,20 @@ class _AuthorDetailState extends State<AuthorDetail> {
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Consumer<AuthorProvider>(
-                builder: (context,provider,child) {
+                builder: (context, provider, child) {
                   bool isFav = provider.isDetailFav == 1;
                   return IconButton(
                     onPressed: () {
-                      provider.updateFavourite(widget.authorData.id, isFav ? 0 : 1);
+                      provider.updateFavourite(
+                        widget.authorData.id,
+                        isFav ? 0 : 1,
+                      );
                     },
-                    icon: isFav ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                    icon: isFav
+                        ? Icon(Icons.favorite)
+                        : Icon(Icons.favorite_border),
                   );
-                }
+                },
               ),
             ),
           ),

@@ -86,19 +86,16 @@ class _AddAuthorSheetState extends State<AddAuthorSheet> {
               ImagePicker picker = ImagePicker();
               XFile? file = await picker.pickImage(source: ImageSource.gallery);
               _photo = await file?.readAsBytes();
-              if(_photo != null){
-                setState(() {
-
-                });
+              if (_photo != null) {
+                setState(() {});
               }
             },
             child: Text("Upload Photo"),
           ),
-          SizedBox(height: 4,),
-          if(_photo != null)
-          Center(child: Image.memory(_photo!, width: 200, height: 200)),
-          if(_photo != null)
-            SizedBox(height: 4,),
+          SizedBox(height: 4),
+          if (_photo != null)
+            Center(child: Image.memory(_photo!, width: 200, height: 200)),
+          if (_photo != null) SizedBox(height: 4),
           InkWell(
             onTap: () async {
               String name = _nameController.text.trim();
