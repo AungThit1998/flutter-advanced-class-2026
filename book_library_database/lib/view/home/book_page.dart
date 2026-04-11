@@ -19,8 +19,6 @@ class _BookPageState extends State<BookPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-    );
+    return Scaffold();
   }
 }

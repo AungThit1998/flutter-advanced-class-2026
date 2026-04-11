@@ -17,9 +17,10 @@ class LibraryDbService {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String dbPath = "${documentDirectory.path}/$_dbName";
     _database = await openDatabase(dbPath, version: 1,
-    onConfigure: (db){
-      db.execute("PRAGMA foreign_keys = ON;");
-    });
+      onConfigure: (db){
+        db.execute("PRAGMA foreign_keys = ON;");
+      }
+    );
     _createAuthorTable();
     _createBookTable();
   }
@@ -32,20 +33,22 @@ class LibraryDbService {
     );
   }
 
-  static Future<void> _createBookTable() async {
-    return _database.execute(
-      """
-       CREATE TABLE IF NOT EXISTS $_bookTable (
+  static Future<void> _createBookTable() async{
+    await _database.execute(
+      '''
+         CREATE TABLE IF NOT EXISTS $_bookTable (
                id INTEGER PRIMARY KEY AUTOINCREMENT,
                title TEXT NOT NULL,
                description TEXT,
                cover BLOB,
+                fav INTEGER,
                author_id INTEGER NOT NULL,
-               FOREIGN KEY(author_id) REFERENCES authors(id) ON DELETE RESTRICT
+               FOREIGN KEY(author_id) REFERENCES authors(id) ON DELETE RESTRICT  
              );
-              """,
+      '''
     );
   }
+
 
   Future<int> insertAuthor({
     required String name,
@@ -62,11 +65,11 @@ class LibraryDbService {
     required String name,
     required String description,
     Uint8List? cover,
-    required String authorId,
+    required int authorId,
   }) {
     return _database.rawInsert(
-      'INSERT INTO books (title, description, cover, author_id,fav) VALUES(?,?, ?,?,?);',
-      [name, description, cover, authorId,null],
+      'INSERT INTO $_bookTable (title, description, cover,fav, author_id) VALUES (?,?,?,?,?);',
+      [name, description, cover,null, authorId],
     );
   }
 
@@ -77,8 +80,22 @@ class LibraryDbService {
     }).toList();
   }
 
-  Future<List<BookModel>> getAllBook() async {
-    final listOfMap = await _database.rawQuery("select * from $_bookTable");
+  Future<List<AuthorModel>> getAllFavAuthor() async {
+    final listOfMap = await _database.rawQuery("select * from $_authorTable where fav = 1");
+    return listOfMap.map((json) {
+      return AuthorModel.fromJson(json);
+    }).toList();
+  }
+
+  Future<List<BookModel>> getAllBooks() async{
+    final listOfMap = await _database.rawQuery('SELECT b.*, a.name FROM books b JOIN authors a ON a.id = b.author_id;');
+    return listOfMap.map((json){
+      return BookModel.fromJson(json);
+    }).toList();
+  }
+
+  Future<List<BookModel>> getAllFavBooks() async{
+    final listOfMap = await _database.rawQuery('SELECT b.*, a.name FROM books b JOIN authors a ON a.id = b.author_id where fav = 1;');
     return listOfMap.map((json){
       return BookModel.fromJson(json);
     }).toList();
