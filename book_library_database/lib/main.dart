@@ -1,6 +1,7 @@
 import 'package:book_library_database/const/theme/my_theme.dart';
 import 'package:book_library_database/data/library_db_service.dart';
 import 'package:book_library_database/provider/author_provider.dart';
+import 'package:book_library_database/provider/book_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AuthorProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthorProvider()),
+        ChangeNotifierProvider(create: (_) => BookProvider()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',

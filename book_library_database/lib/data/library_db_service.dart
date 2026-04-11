@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:book_library_database/data/Book_model.dart';
 import 'package:book_library_database/data/aithor_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,8 +16,12 @@ class LibraryDbService {
   static Future<void> createDatabase() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String dbPath = "${documentDirectory.path}/$_dbName";
-    _database = await openDatabase(dbPath, version: 1);
+    _database = await openDatabase(dbPath, version: 1,
+    onConfigure: (db){
+      db.execute("PRAGMA foreign_keys = ON;");
+    });
     _createAuthorTable();
+    _createBookTable();
   }
 
   //authors
@@ -24,6 +29,21 @@ class LibraryDbService {
   static Future<void> _createAuthorTable() async {
     return _database.execute(
       "create table if not exists $_authorTable (id integer primary key autoincrement, name text, description text, photo blob, fav integer);",
+    );
+  }
+
+  static Future<void> _createBookTable() async {
+    return _database.execute(
+      """
+       CREATE TABLE IF NOT EXISTS $_bookTable (
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+               title TEXT NOT NULL,
+               description TEXT,
+               cover BLOB,
+               author_id INTEGER NOT NULL,
+               FOREIGN KEY(author_id) REFERENCES authors(id) ON DELETE RESTRICT
+             );
+              """,
     );
   }
 
@@ -38,10 +58,29 @@ class LibraryDbService {
     );
   }
 
+  Future<int> insertBook({
+    required String name,
+    required String description,
+    Uint8List? cover,
+    required String authorId,
+  }) {
+    return _database.rawInsert(
+      'INSERT INTO books (title, description, cover, author_id,fav) VALUES(?,?, ?,?,?);',
+      [name, description, cover, authorId,null],
+    );
+  }
+
   Future<List<AuthorModel>> getAllAuthor() async {
     final listOfMap = await _database.rawQuery("select * from $_authorTable");
     return listOfMap.map((json) {
       return AuthorModel.fromJson(json);
+    }).toList();
+  }
+
+  Future<List<BookModel>> getAllBook() async {
+    final listOfMap = await _database.rawQuery("select * from $_bookTable");
+    return listOfMap.map((json){
+      return BookModel.fromJson(json);
     }).toList();
   }
 

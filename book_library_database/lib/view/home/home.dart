@@ -1,4 +1,5 @@
 import 'package:book_library_database/view/home/author_page.dart';
+import 'package:book_library_database/view/home/book_page.dart';
 import 'package:book_library_database/view/home/widgets/add_author_sheet.dart';
 import 'package:book_library_database/view/home/widgets/fab.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _HomeState extends State<Home> {
             )
           : null,
       body: switch (_index) {
+        0 => BookPage(),
         1 => AuthorPage(),
         _ => SizedBox(),
       },
