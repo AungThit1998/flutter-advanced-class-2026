@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_explorer/home/delete_confirm_dialog.dart';
 import 'package:file_explorer/home/text_edit_screen.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 
 import '../file_services/file_services.dart';
@@ -152,7 +153,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 subtitle: Text(file.statSync().changed.toString()),
                 trailing: PopupMenuButton<String>(
                   onSelected: (String str) async {
-                    if (str == 'delete') {
+                    if (str == 'export') {
+                      FileSaver.instance.saveAs(
+                        name: fileName,
+                        bytes: file.readAsBytesSync(),
+                        fileExtension: 'txt',
+                        mimeType: MimeType.text,
+                      );
+                    } else if (str == 'delete') {
                       bool isDelete = await showDialog(
                         context: context,
                         builder: (context) {
@@ -180,6 +188,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       PopupMenuItem<String>(
                         value: "delete",
                         child: Text("Delete"),
+                      ),
+                      PopupMenuItem<String>(
+                        value: "export",
+                        child: Text("Export"),
                       ),
                     ];
                   },
