@@ -1,16 +1,13 @@
 # engineering_dictionary_app
 
-Engineering Dictionary Application (Database Lesson)
+This app is engineering dictionary app to show ios first design.
 
-## Getting Started
+## Images
 
-This project is a starting point for a Flutter application.
+Here are some images related to the project (iOS First Design):
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p float="left">
+  <img src="images/Screenshot_20260413_172442.png" width="30%" />
+  <img src="images/Screenshot_20260413_172458.png" width="30%" /> 
+  <img src="images/Screenshot_20260413_172507.png" width="30%" />
+</p>
