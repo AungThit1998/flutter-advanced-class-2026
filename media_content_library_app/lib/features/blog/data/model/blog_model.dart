@@ -1,10 +1,5 @@
 class BlogModel {
-  BlogModel({
-      this.total, 
-      this.page, 
-      this.limit, 
-      this.totalPages, 
-      this.data,});
+  BlogModel({this.total, this.page, this.limit, this.totalPages, this.data});
 
   BlogModel.fromJson(dynamic json) {
     total = json['total'];
@@ -18,11 +13,26 @@ class BlogModel {
       });
     }
   }
+
   num? total;
   num? page;
   num? limit;
   num? totalPages;
   List<BlogData>? data;
+
+  BlogModel copyWith({
+    num? total,
+    num? page,
+    num? limit,
+    num? totalPages,
+    List<BlogData>? data,
+  }) => BlogModel(
+    total: total ?? this.total,
+    page: page ?? this.page,
+    limit: limit ?? this.limit,
+    totalPages: totalPages ?? this.totalPages,
+    data: data ?? this.data,
+  );
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -35,20 +45,20 @@ class BlogModel {
     }
     return map;
   }
-
 }
 
 class BlogData {
   BlogData({
-      this.id, 
-      this.type, 
-      this.title, 
-      this.excerpt, 
-      this.author, 
-      this.createdAt, 
-      this.comments, 
-      this.coverImage, 
-      this.content,});
+    this.id,
+    this.type,
+    this.title,
+    this.excerpt,
+    this.author,
+    this.createdAt,
+    this.comments,
+    this.coverImage,
+    this.content,
+  });
 
   BlogData.fromJson(dynamic json) {
     id = json['id'];
@@ -66,6 +76,7 @@ class BlogData {
     coverImage = json['coverImage'];
     content = json['content'];
   }
+
   num? id;
   String? type;
   String? title;
@@ -75,6 +86,28 @@ class BlogData {
   List<dynamic>? comments;
   String? coverImage;
   String? content;
+
+  BlogData copyWith({
+    num? id,
+    String? type,
+    String? title,
+    String? excerpt,
+    String? author,
+    String? createdAt,
+    List<dynamic>? comments,
+    String? coverImage,
+    String? content,
+  }) => BlogData(
+    id: id ?? this.id,
+    type: type ?? this.type,
+    title: title ?? this.title,
+    excerpt: excerpt ?? this.excerpt,
+    author: author ?? this.author,
+    createdAt: createdAt ?? this.createdAt,
+    comments: comments ?? this.comments,
+    coverImage: coverImage ?? this.coverImage,
+    content: content ?? this.content,
+  );
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -91,5 +124,4 @@ class BlogData {
     map['content'] = content;
     return map;
   }
-
 }

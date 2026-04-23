@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library_app/features/blog/data/model/blog_model.dart';
 import 'package:media_content_library_app/features/blog/notifiers/blog_list_notifier.dart';
 import 'package:media_content_library_app/features/blog/notifiers/blog_list_state_model.dart';
+import 'package:media_content_library_app/features/blog/ui/widgets/blog_item.dart';
 
 class BlogScreen extends ConsumerStatefulWidget {
   const BlogScreen({super.key});
@@ -47,33 +48,32 @@ class _BlogScreenState extends ConsumerState<BlogScreen> {
         );
       }
       return ListView.builder(
-        itemCount: blogList.length,
+        itemCount: blogList.length + 1,
           itemBuilder: (context,index){
+            if(index == blogList.length){
+               if(index == model.blogModel?.total){
+                 return Center(
+                   child: Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Text("Load Complete"),
+                   ),
+                 );
+               }
+               if(model.isPaginateLoading == false){
+                Future((){
+                  ref.read(_blogListProvider.notifier).loadMore();
+                });
+               }
+               return Container(
+                    padding: EdgeInsets.all(8.0),
+                   alignment: Alignment.center,
+                   child: CircularProgressIndicator());
+            }
+
             BlogData blog = blogList[index];
             String? coverImage = blog.coverImage;
             String? comments = "${blog.comments?.length} Comments";
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                coverImage != null ?  Image.network(coverImage) :
-                     Icon(Icons.image),
-                  Text(blog.title ?? ""),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          blog.author ?? ""
-                        ),
-                        Text(comments)
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
+            return BlogItem(blogData: blog);
           });
     }
   }

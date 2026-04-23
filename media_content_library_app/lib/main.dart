@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library_app/const/di/locator.dart';
+import 'package:media_content_library_app/const/router/router.dart';
 
 import 'features/home/ui/screens/home.dart';
 
@@ -15,6 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter Demo', home: Home());
+    return MaterialApp.router(title: 'Flutter Demo',
+       routerConfig: myRoutes,
+    );
   }
 }
