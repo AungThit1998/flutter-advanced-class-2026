@@ -28,7 +28,7 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
           icon: Icon(Icons.picture_as_pdf_outlined),
           label: "Pdf",
         ),
-        NavigationDestination(icon: Icon(Icons.settings), label: "Settins"),
+        NavigationDestination(icon: Icon(Icons.settings), label: "Settings"),
       ],
     );
   }
