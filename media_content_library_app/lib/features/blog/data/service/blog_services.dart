@@ -13,4 +13,9 @@ class BlogServices {
     );
     return BlogModel.fromJson(response.data);
   }
+
+  Future<BlogData> getBlogDetail({required String type,required String id}) async{
+    final response = await _dio.get("content/$type/$id");
+    return BlogData.fromJson(response.data);
+  }
 }

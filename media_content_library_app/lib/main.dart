@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library_app/const/di/locator.dart';
@@ -16,8 +18,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(title: 'Flutter Demo',
-       routerConfig: myRoutes,
+    return MaterialApp.router(
+      scrollBehavior: MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+        }
+      ),
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      routerConfig: myRoutes,
     );
   }
 }

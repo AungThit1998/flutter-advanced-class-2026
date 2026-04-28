@@ -1,5 +1,5 @@
-import '../data/model/blog_model.dart';
-import '../data/service/blog_services.dart';
+import '../../data/model/blog_model.dart';
+import '../../data/service/blog_services.dart';
 import 'blog_list_state_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

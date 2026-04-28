@@ -1,5 +1,8 @@
+import "package:flutter/material.dart";
+import "package:flutter/src/widgets/basic.dart";
 import "package:go_router/go_router.dart";
 import "package:media_content_library_app/features/audio/ui/screen/audio_screen.dart";
+import "package:media_content_library_app/features/blog/ui/screens/blog_detail_screen.dart";
 import "package:media_content_library_app/features/blog/ui/screens/blog_screen.dart";
 import "package:media_content_library_app/features/home/ui/screens/home.dart";
 import "package:media_content_library_app/features/pdf/ui/screen/pdf_screen.dart";
@@ -71,5 +74,11 @@ GoRouter myRoutes = GoRouter(
         return Home(shell: shell);
       },
     ),
+    GoRoute(path: "/detail/:type/:id",
+    builder: (context,state){
+      String? type = state.pathParameters['type'];
+      String? id = state.pathParameters['id'];
+      return Scaffold(body: BlogDetailScreen(type: type, id: id));
+    }),
   ],
 );
