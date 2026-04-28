@@ -78,7 +78,7 @@ GoRouter myRoutes = GoRouter(
     builder: (context,state){
       String? type = state.pathParameters['type'];
       String? id = state.pathParameters['id'];
-      return Scaffold(body: BlogDetailScreen(type: type, id: id));
+      return BlogDetailScreen(type: type, id: id);
     }),
   ],
 );

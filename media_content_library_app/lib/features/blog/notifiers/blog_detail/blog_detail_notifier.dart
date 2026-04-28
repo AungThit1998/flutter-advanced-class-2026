@@ -3,7 +3,10 @@ import 'package:media_content_library_app/features/blog/data/model/blog_model.da
 import 'package:media_content_library_app/features/blog/data/service/blog_services.dart';
 
 import 'blog_detail_state_model.dart';
-typedef BlogDetailProvider = NotifierProvider<BlogDetailNotifier,BlogDetailStateModel>;
+
+typedef BlogDetailProvider =
+    NotifierProvider<BlogDetailNotifier, BlogDetailStateModel>;
+
 class BlogDetailNotifier extends Notifier<BlogDetailStateModel> {
   final BlogServices _blogServices = BlogServices();
 
@@ -14,14 +17,19 @@ class BlogDetailNotifier extends Notifier<BlogDetailStateModel> {
 
   void getBlogDetail({required String? type, required String? id}) async {
     try {
-      state = state.copWith(isLoading: true);
-      if(type == null || id == null){
+      state = state.copWith(isLoading: true, isSuccess: false);
+      if (type == null || id == null) {
         state = state.copWith(isLoading: false, isError: true);
-      }
-      else {
+      } else {
         BlogData blogData = await _blogServices.getBlogDetail(
-            type: type, id: id);
-        state = state.copWith(isLoading: false, blogData: blogData);
+          type: type,
+          id: id,
+        );
+        state = state.copWith(
+          isLoading: false,
+          blogData: blogData,
+          isSuccess: true,
+        );
       }
     } catch (e) {
       state = state.copWith(isLoading: false, isError: true);
