@@ -13,4 +13,8 @@ class AudioServices {
     );
     return AudioModel.fromJson(response.data);
   }
+  Future<AudioData> getBlogDetail({required String type,required String id}) async{
+    final response = await _dio.get("content/$type/$id");
+    return AudioData.fromJson(response.data);
+  }
 }

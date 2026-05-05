@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library_app/const/widgets/common/try_again_widget.dart';
 import 'package:media_content_library_app/features/audio/data/model/audio_model.dart';
-import 'package:media_content_library_app/features/audio/notifiers/audio_notifier.dart';
-import 'package:media_content_library_app/features/audio/notifiers/audio_state_model.dart';
+import 'package:media_content_library_app/features/audio/notifiers/audio_list/audio_notifier.dart';
+import 'package:media_content_library_app/features/audio/notifiers/audio_list/audio_state_model.dart';
 import 'package:media_content_library_app/features/blog/ui/widgets/blog_cover_image.dart';
 
 import '../widgets/audio_item.dart';

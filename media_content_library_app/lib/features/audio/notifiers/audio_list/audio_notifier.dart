@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/model/audio_model.dart';
-import '../data/service/audio_services.dart';
+import '../../data/model/audio_model.dart';
+import '../../data/service/audio_services.dart';
 import 'audio_state_model.dart';
 
 typedef AudioProvider = NotifierProvider<AudioNotifier,AudioStateModel>;
