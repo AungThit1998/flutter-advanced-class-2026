@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library_app/const/responsive/responsive_layout.dart';
+import 'package:media_content_library_app/const/widgets/common/try_again_widget.dart';
 import 'package:media_content_library_app/features/blog/data/model/blog_model.dart';
 import 'package:media_content_library_app/features/blog/notifiers/blog_list/blog_list_notifier.dart';
 import 'package:media_content_library_app/features/blog/notifiers/blog_list/blog_list_state_model.dart';
@@ -36,18 +37,9 @@ class _BlogScreenState extends ConsumerState<BlogScreen> {
       return Center(child: CircularProgressIndicator());
     }
     if (model.isError) {
-      return Column(
-        children: [
-          Text("Something wrong"),
-          SizedBox(height: 8),
-          OutlinedButton(
-            onPressed: () {
-              ref.read(_blogListProvider.notifier).getBLogList();
-            },
-            child: Text("Try Again"),
-          ),
-        ],
-      );
+      return TryAgainWidget(onTryAgain: (){
+        ref.read(_blogListProvider.notifier).getBLogList();
+      });
     } else {
       List<BlogData>? blogList = model.blogModel?.data ?? [];
       if (blogList.isEmpty) {

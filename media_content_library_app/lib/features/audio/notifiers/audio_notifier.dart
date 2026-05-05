@@ -3,6 +3,8 @@ import '../data/model/audio_model.dart';
 import '../data/service/audio_services.dart';
 import 'audio_state_model.dart';
 
+typedef AudioProvider = NotifierProvider<AudioNotifier,AudioStateModel>;
+
 class AudioNotifier extends Notifier<AudioStateModel> {
   final AudioServices _audioServices = AudioServices();
 
