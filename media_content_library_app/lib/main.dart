@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_content_library_app/const/di/locator.dart';
 import 'package:media_content_library_app/const/router/router.dart';
 
-import 'features/home/ui/screens/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
