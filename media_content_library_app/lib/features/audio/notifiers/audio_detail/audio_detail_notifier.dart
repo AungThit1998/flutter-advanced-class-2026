@@ -20,7 +20,7 @@ class AudioDetailNotifier extends Notifier<AudioDetailStateModel> {
       return;
     }
     try {
-      AudioData audioData = await _audioServices.getBlogDetail(
+      AudioData audioData = await _audioServices.getAudioDetail(
         type: ApiConst.audio,
         id: id,
       );

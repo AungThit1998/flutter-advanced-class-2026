@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:media_content_library_app/const/widgets/common/try_again_widget.dart';
-import 'package:media_content_library_app/features/audio/data/model/audio_model.dart';
-import 'package:media_content_library_app/features/audio/notifiers/audio_detail/audio_detail_state_model.dart';
-
+import '../../../../const/widgets/common/try_again_widget.dart';
+import '../../data/model/audio_model.dart';
 import '../../notifiers/audio_detail/audio_detail_notifier.dart';
+import '../../notifiers/audio_detail/audio_detail_state_model.dart';
 
 class AudioDetailScreen extends ConsumerStatefulWidget {
   const AudioDetailScreen({super.key, required this.id});
@@ -30,7 +29,7 @@ class _AudioDetailScreenState extends ConsumerState<AudioDetailScreen> {
       ref.read(_audioDetailProvider.notifier).getAudio(widget.id);
     });
   }
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -79,9 +78,9 @@ class _AudioDetailScreenState extends ConsumerState<AudioDetailScreen> {
                 double audioLength = length.inSeconds.toDouble();
 
                 String displayTotal =
-                    "${length.inMinutes}:${(length.inSeconds % 60).toInt()}";
+                    "${_displayTimeFormat(length.inMinutes)}:${_displayTimeFormat((length.inSeconds % 60).toInt())}";
                 String displayCurrent =
-                    "${current.inMinutes}:${(current.inSeconds % 60).toInt()}";
+                    "${_displayTimeFormat(current.inMinutes)}:${_displayTimeFormat((current.inSeconds % 60).toInt())}";
 
                 return Column(
                   children: [
@@ -98,29 +97,45 @@ class _AudioDetailScreenState extends ConsumerState<AudioDetailScreen> {
                 );
               },
             ),
-            StreamBuilder<PlayerState>(stream: _audioPlayer.playerStateStream, builder: (context,snapshot){
-              PlayerState? playerState = snapshot.data;
-              bool isPlaying = playerState?.playing ?? false;
-              return IconButton(onPressed: (){
-                if(isPlaying){
-                  _audioPlayer.pause();
-                }
-                else if(_audioPlayer.processingState == ProcessingState.ready){
-                  _audioPlayer.play();
-                }
-              }, icon: isPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow_rounded));
-            })
+            StreamBuilder<PlayerState>(
+              stream: _audioPlayer.playerStateStream,
+              builder: (context, snapshot) {
+                PlayerState? playerState = snapshot.data;
+                bool isPlaying = playerState?.playing ?? false;
+                return IconButton(
+                  onPressed: () {
+                    if (isPlaying) {
+                      _audioPlayer.pause();
+                    } else if (_audioPlayer.processingState ==
+                        ProcessingState.ready) {
+                      _audioPlayer.play();
+                    }
+                  },
+                  icon: isPlaying
+                      ? Icon(Icons.pause)
+                      : Icon(Icons.play_arrow_rounded),
+                );
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _loadAudio(String? url) {
+  void _loadAudio(String? url) async {
     if (url == null || url.isEmpty || _url == url) {
       return;
     }
     _url = url;
-    _audioPlayer.setUrl(_url!);
+    await _audioPlayer.setUrl(_url!);
+    _audioPlayer.play();
+  }
+
+  String _displayTimeFormat(int time) {
+    if (time < 10) {
+      return "0$time";
+    }
+    return time.toString();
   }
 }

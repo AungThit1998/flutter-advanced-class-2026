@@ -9,6 +9,7 @@ import "package:media_content_library_app/features/blog/ui/screens/blog_screen.d
 import "package:media_content_library_app/features/home/ui/screens/home.dart";
 import "package:media_content_library_app/features/pdf/ui/screen/pdf_screen.dart";
 import "package:media_content_library_app/features/settings/ui/screen/setting_screen.dart";
+import "package:media_content_library_app/features/video/ui/screen/video_detail_screen.dart";
 import "package:media_content_library_app/features/video/ui/screen/video_screen.dart";
 
 GoRouter myRoutes = GoRouter(
@@ -85,6 +86,9 @@ GoRouter myRoutes = GoRouter(
       }
       else if(type == ApiConst.audio){
         return AudioDetailScreen(id: id);
+      }
+      else if(type == ApiConst.video){
+        return VideoDetailScreen(id: id);
       }
       return SizedBox();
     }),
