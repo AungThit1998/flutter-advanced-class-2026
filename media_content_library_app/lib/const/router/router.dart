@@ -7,6 +7,7 @@ import "package:media_content_library_app/features/audio/ui/screen/audio_screen.
 import "package:media_content_library_app/features/blog/ui/screens/blog_detail_screen.dart";
 import "package:media_content_library_app/features/blog/ui/screens/blog_screen.dart";
 import "package:media_content_library_app/features/home/ui/screens/home.dart";
+import "package:media_content_library_app/features/pdf/ui/screen/pdf_detail_screen.dart";
 import "package:media_content_library_app/features/pdf/ui/screen/pdf_screen.dart";
 import "package:media_content_library_app/features/settings/ui/screen/setting_screen.dart";
 import "package:media_content_library_app/features/video/ui/screen/video_detail_screen.dart";
@@ -77,20 +78,22 @@ GoRouter myRoutes = GoRouter(
         return Home(shell: shell);
       },
     ),
-    GoRoute(path: "/detail/:type/:id",
-    builder: (context,state){
-      String? type = state.pathParameters['type'];
-      String? id = state.pathParameters['id'];
-      if(type == ApiConst.blog) {
-        return BlogDetailScreen(type: type, id: id);
-      }
-      else if(type == ApiConst.audio){
-        return AudioDetailScreen(id: id);
-      }
-      else if(type == ApiConst.video){
-        return VideoDetailScreen(id: id);
-      }
-      return SizedBox();
-    }),
+    GoRoute(
+      path: "/detail/:type/:id",
+      builder: (context, state) {
+        String? type = state.pathParameters['type'];
+        String? id = state.pathParameters['id'];
+        if (type == ApiConst.blog) {
+          return BlogDetailScreen(type: type, id: id);
+        } else if (type == ApiConst.audio) {
+          return AudioDetailScreen(id: id);
+        } else if (type == ApiConst.video) {
+          return VideoDetailScreen(id: id);
+        } else if (type == ApiConst.pdf) {
+          return PdfDetailScreen(id: id);
+        }
+        return SizedBox();
+      },
+    ),
   ],
 );

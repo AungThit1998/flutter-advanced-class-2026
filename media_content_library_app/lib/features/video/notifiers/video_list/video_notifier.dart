@@ -31,5 +31,4 @@ class VideoNotifier extends Notifier<VideoStateModel>{
       );
     }
   }
-
 }
