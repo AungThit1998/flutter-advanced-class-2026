@@ -48,6 +48,7 @@ class _VideoDetailScreenState extends ConsumerState<VideoDetailScreen> {
       });
     }
     VideoData? videoData = stateModel.videoData;
+    bool isYoutubeLinkOk = videoData?.source == "youtube" && videoData?.url != null;
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -55,13 +56,15 @@ class _VideoDetailScreenState extends ConsumerState<VideoDetailScreen> {
         ),
         child: Column(
           children: [
-            Text(videoData?.description ?? ""),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(videoData?.description ?? ""),
+            ),
             if(videoData?.source == "direct" && videoData?.url != null)
               DirectVideoPlayer(link: videoData!.url!),
-            if(videoData?.source == "youtube" && videoData?.url != null)
-              if(kIsWeb)
+              if(isYoutubeLinkOk && kIsWeb)
                 MyYoutubeVideoPlayerWeb(url: videoData!.url!),
-              if(!kIsWeb)
+              if(isYoutubeLinkOk && !kIsWeb)
               MyYoutubeVideoPlayer(url: videoData!.url!),
         ],),
       ),
