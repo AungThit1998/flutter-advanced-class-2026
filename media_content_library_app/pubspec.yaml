@@ -46,6 +46,7 @@ dependencies:
   video_player: ^2.11.1
   syncfusion_flutter_pdfviewer: ^33.2.6
   url_launcher: ^6.3.2
+  flutter_secure_storage: ^10.2.0
 
 dev_dependencies:
   flutter_test:

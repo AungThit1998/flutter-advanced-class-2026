@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:media_content_library_app/const/widgets/common/try_again_widget.dart';
 import 'package:media_content_library_app/features/auth/notifier/sign_up/sign_up_notifier.dart';
 import 'package:media_content_library_app/features/auth/notifier/sign_up/sign_up_state_model.dart';
@@ -26,6 +27,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget build(BuildContext context) {
     OtpStateModel otpStateModel = ref.watch(_otpProvider);
     SignUpStateModel signUpStateModel = ref.watch(_signupProvider);
+    ref.listen(_signupProvider, (oldState,newState) async{
+      if(newState.isSuccess && newState.signUpModel?.token?.isNotEmpty== true){
+        await Future.delayed(Duration(seconds: 1));
+        if(context.mounted) {
+          context.go("/settings");
+        }
+      }
+    });
     return Scaffold(
       appBar: AppBar(title: Text("Sign up")),
       body: Column(
@@ -176,6 +185,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
               ),
             ),
+          if(signUpStateModel.isSuccess)
+            Center(
+              child: Text("Signup Success"),
+            )
         ],
       ),
     );
