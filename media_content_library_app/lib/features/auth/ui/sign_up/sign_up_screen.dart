@@ -90,6 +90,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       ),
                       SizedBox(height: 8),
                       TextFormField(
+                        obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: "Enter your password (min 8 digits) *",

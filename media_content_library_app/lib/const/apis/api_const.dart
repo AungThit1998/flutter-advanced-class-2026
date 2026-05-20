@@ -6,6 +6,7 @@ class ApiConst {
   static const pdf = "pdf";
   static const signUpOTP = "auth/signup-otp";
   static const signUp = "auth/signup";
+  static const signIn = "auth/login";
 
   ApiConst._();
 }

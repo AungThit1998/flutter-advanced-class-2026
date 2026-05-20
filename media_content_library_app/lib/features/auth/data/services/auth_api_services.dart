@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:media_content_library_app/features/auth/data/models/sign_in/sign_in_model.dart';
 import '../../../../const/apis/api_const.dart';
 import '../../../../const/di/locator.dart';
 import '../models/sign_up/sign_up_model.dart';
@@ -26,5 +27,16 @@ class AuthApiServices {
       data: {"name": name, "email": email, "otp": otp, "password": password},
     );
     return SignUpModel.fromJson(response.data);
+  }
+
+  Future<SignInModel> signIn({
+    required String email,
+    required String password,
+  }) async {
+    final response = await _dio.post(
+      ApiConst.signIn,
+      data: {"email": email, "password": password},
+    );
+    return SignInModel.fromJson(response.data);
   }
 }
