@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:media_content_library_app/const/apis/api_const.dart';
+import '../../../../const/widgets/common/comment_floating_action_button.dart';
 import '../../../../const/widgets/common/try_again_widget.dart';
 import '../../data/model/audio_model.dart';
 import '../../notifiers/audio_detail/audio_detail_notifier.dart';
@@ -44,9 +46,13 @@ class _AudioDetailScreenState extends ConsumerState<AudioDetailScreen> {
         _loadAudio(newState.audioData?.url);
       }
     });
+    String? title = stateModel.audioData?.title;
     return Scaffold(
-      appBar: AppBar(title: Text(stateModel.audioData?.title ?? "....")),
+      appBar: AppBar(title: Text(title ?? "....")),
       body: _audioDetailBody(),
+      floatingActionButton: title != null
+          ? CommentFloatingActionButton(type: ApiConst.audio, id: widget.id, title: title)
+          : null,
     );
   }
 

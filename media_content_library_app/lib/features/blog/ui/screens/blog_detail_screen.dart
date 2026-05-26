@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:media_content_library_app/features/comments/data/models/comment_model.dart';
 import 'package:media_content_library_app/features/comments/ui/comment_dialog.dart';
 
+import '../../../../const/widgets/common/comment_floating_action_button.dart';
 import '../../../../const/widgets/web_view/web_view_common.dart';
 import '../../notifiers/blog_detail/blog_detail_notifier.dart';
 import '../../notifiers/blog_detail/blog_detail_state_model.dart';
@@ -43,18 +45,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
       appBar: AppBar(title: title != null ? Text(title) : SizedBox.shrink()),
       body: _blogDetailBody(),
       floatingActionButton: title != null
-          ? FloatingActionButton(
-              onPressed: () {
-                showCommentDialog(
-                  context: context,
-                  type: widget.type,
-                  id: widget.id,
-                  comments: detailStateModel.blogData?.comments,
-                  title: title,
-                );
-              },
-              child: Icon(Icons.comment_bank_outlined),
-            )
+          ? CommentFloatingActionButton(type: widget.type, id: widget.id, title: title)
           : null,
     );
   }

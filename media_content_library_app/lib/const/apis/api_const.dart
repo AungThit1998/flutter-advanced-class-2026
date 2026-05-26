@@ -8,5 +8,9 @@ class ApiConst {
   static const signUp = "auth/signup";
   static const signIn = "auth/login";
 
+  static String addComment(String type, String id){
+    return "content/$type/$id/comments";
+  }
+
   ApiConst._();
 }
