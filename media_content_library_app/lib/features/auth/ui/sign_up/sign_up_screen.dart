@@ -7,6 +7,9 @@ import 'package:media_content_library_app/features/auth/notifier/sign_up/sign_up
 import 'package:media_content_library_app/features/auth/notifier/sign_up_otp/otp_notifier.dart';
 import 'package:media_content_library_app/features/auth/notifier/sign_up_otp/otp_state_model.dart';
 
+import '../../../../const/di/locator.dart';
+import '../../../settings/notifier/profile_notifier.dart';
+
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
 
@@ -22,6 +25,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final OTPProvider _otpProvider = OTPProvider(() => OtpNotifier());
   final SignupProvider _signupProvider = SignupProvider(() => SignUpNotifier());
   final TextEditingController _otpController = TextEditingController();
+  final ProfileProvider _profileProvider = getIt.get();
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       if(newState.isSuccess && newState.signUpModel?.token?.isNotEmpty== true){
         await Future.delayed(Duration(seconds: 1));
         if(context.mounted) {
+          ref.read(_profileProvider.notifier).checkAuth();
           context.go("/settings");
         }
       }

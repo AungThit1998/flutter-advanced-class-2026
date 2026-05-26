@@ -30,7 +30,7 @@ class SignInNotifier extends Notifier<SignInStateModel> {
         email: email,
         password: password,
       );
-      _saveUserCredentials(signInModel);
+     await _saveUserCredentials(signInModel);
       state = state.copyWith(
         isLoading: false,
         isSuccess: true,

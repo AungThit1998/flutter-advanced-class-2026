@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:media_content_library_app/const/widgets/common/try_again_widget.dart';
 import 'package:media_content_library_app/features/auth/notifier/sign_in/sign_in_notifier.dart';
 import 'package:media_content_library_app/features/auth/notifier/sign_in/sign_in_state_model.dart';
+import 'package:media_content_library_app/features/settings/notifier/profile_notifier.dart';
+
+import '../../../../const/di/locator.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -19,6 +22,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   String? _password;
   String? _email;
+  final ProfileProvider _profileProvider = getIt.get();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           newState.signInModel?.token?.isNotEmpty == true) {
         await Future.delayed(Duration(seconds: 1));
         if (context.mounted) {
+          ref.read(_profileProvider.notifier).checkAuth();
           context.go("/settings");
         }
       }

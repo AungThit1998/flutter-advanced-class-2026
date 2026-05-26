@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:media_content_library_app/features/comments/ui/comment_dialog.dart';
 
 import '../../../../const/widgets/web_view/web_view_common.dart';
 import '../../notifiers/blog_detail/blog_detail_notifier.dart';
@@ -41,6 +42,20 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
     return Scaffold(
       appBar: AppBar(title: title != null ? Text(title) : SizedBox.shrink()),
       body: _blogDetailBody(),
+      floatingActionButton: title != null
+          ? FloatingActionButton(
+              onPressed: () {
+                showCommentDialog(
+                  context: context,
+                  type: widget.type,
+                  id: widget.id,
+                  comments: detailStateModel.blogData?.comments,
+                  title: title,
+                );
+              },
+              child: Icon(Icons.comment_bank_outlined),
+            )
+          : null,
     );
   }
 
@@ -48,7 +63,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
     BlogDetailStateModel detailStateModel = ref.watch(_blogDetailProvider);
     String content = detailStateModel.blogData?.content ?? '';
     if (detailStateModel.isLoading) {
-     return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     }
     if (detailStateModel.isError) {
       return Column(

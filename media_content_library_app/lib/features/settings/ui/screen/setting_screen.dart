@@ -16,17 +16,10 @@ class SettingScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingScreenState extends ConsumerState<SettingScreen> {
-  final ProfileProvider _provider = ProfileProvider(() => ProfileNotifier());
+  final ProfileProvider _provider = getIt.get();
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      ref.read(_provider.notifier).checkAuth();
-    });
-  }
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((_){
       ref.read(_provider.notifier).checkAuth();
     });
