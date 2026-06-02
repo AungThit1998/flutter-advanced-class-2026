@@ -45,7 +45,12 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen> {
       appBar: AppBar(title: title != null ? Text(title) : SizedBox.shrink()),
       body: _blogDetailBody(),
       floatingActionButton: title != null
-          ? CommentFloatingActionButton(type: widget.type, id: widget.id, title: title)
+          ? CommentFloatingActionButton(
+              type: widget.type,
+              id: widget.id,
+              title: title,
+              comments: detailStateModel.blogData?.comments,
+            )
           : null,
     );
   }

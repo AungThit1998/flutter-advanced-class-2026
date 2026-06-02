@@ -51,7 +51,12 @@ class _AudioDetailScreenState extends ConsumerState<AudioDetailScreen> {
       appBar: AppBar(title: Text(title ?? "....")),
       body: _audioDetailBody(),
       floatingActionButton: title != null
-          ? CommentFloatingActionButton(type: ApiConst.audio, id: widget.id, title: title)
+          ? CommentFloatingActionButton(
+              type: ApiConst.audio,
+              id: widget.id,
+              title: title,
+              comments: stateModel.audioData?.comments ,
+            )
           : null,
     );
   }

@@ -27,11 +27,23 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final TextEditingController _otpController = TextEditingController();
   final ProfileProvider _profileProvider = getIt.get();
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      ref.read(_profileProvider.notifier).checkAuth();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     OtpStateModel otpStateModel = ref.watch(_otpProvider);
     SignUpStateModel signUpStateModel = ref.watch(_signupProvider);
+    ref.listen(_profileProvider, (oldState, newState){
+      if(newState.token?.isNotEmpty == true){
+        context.go("/");
+      }
+    });
     ref.listen(_signupProvider, (oldState,newState) async{
       if(newState.isSuccess && newState.signUpModel?.token?.isNotEmpty== true){
         await Future.delayed(Duration(seconds: 1));

@@ -25,7 +25,20 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   final ProfileProvider _profileProvider = getIt.get();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      ref.read(_profileProvider.notifier).checkAuth();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ref.listen(_profileProvider, (oldState, newState){
+      if(newState.token?.isNotEmpty == true){
+        context.go("/");
+      }
+    });
     ref.listen(_provider, (oldState, newState) async {
       if (newState.isSuccess &&
           newState.signInModel?.token?.isNotEmpty == true) {

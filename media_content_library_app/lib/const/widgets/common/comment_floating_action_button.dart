@@ -15,7 +15,7 @@ class CommentFloatingActionButton extends StatelessWidget {
     required this.type,
     required this.id,
     required this.title,
-    this.comments,
+    required this.comments,
   });
 
   @override
