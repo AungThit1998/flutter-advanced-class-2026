@@ -1,10 +1,7 @@
+import 'package:media_content_library_app/features/comments/data/models/comment_model.dart';
+
 class AudioModel {
-  AudioModel({
-      this.total, 
-      this.page, 
-      this.limit, 
-      this.totalPages, 
-      this.data,});
+  AudioModel({this.total, this.page, this.limit, this.totalPages, this.data});
 
   AudioModel.fromJson(dynamic json) {
     total = json['total'];
@@ -18,22 +15,27 @@ class AudioModel {
       });
     }
   }
+
   num? total;
   num? page;
   num? limit;
   num? totalPages;
   List<AudioData>? data;
-AudioModel copyWith({  num? total,
-  num? page,
-  num? limit,
-  num? totalPages,
-  List<AudioData>? data,
-}) => AudioModel(  total: total ?? this.total,
-  page: page ?? this.page,
-  limit: limit ?? this.limit,
-  totalPages: totalPages ?? this.totalPages,
-  data: data ?? this.data,
-);
+
+  AudioModel copyWith({
+    num? total,
+    num? page,
+    num? limit,
+    num? totalPages,
+    List<AudioData>? data,
+  }) => AudioModel(
+    total: total ?? this.total,
+    page: page ?? this.page,
+    limit: limit ?? this.limit,
+    totalPages: totalPages ?? this.totalPages,
+    data: data ?? this.data,
+  );
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['total'] = total;
@@ -45,20 +47,20 @@ AudioModel copyWith({  num? total,
     }
     return map;
   }
-
 }
 
 class AudioData {
   AudioData({
-      this.id, 
-      this.type, 
-      this.title, 
-      this.url, 
-      this.artist, 
-      this.thumbnail, 
-      this.duration, 
-      this.createdAt, 
-      this.comments,});
+    this.id,
+    this.type,
+    this.title,
+    this.url,
+    this.artist,
+    this.thumbnail,
+    this.duration,
+    this.createdAt,
+    this.comments,
+  });
 
   AudioData.fromJson(dynamic json) {
     id = json['id'];
@@ -72,10 +74,11 @@ class AudioData {
     if (json['comments'] != null) {
       comments = [];
       json['comments'].forEach((v) {
-        // comments?.add(Dynamic.fromJson(v));
+        comments?.add(CommentModel.fromJson(v));
       });
     }
   }
+
   num? id;
   String? type;
   String? title;
@@ -84,26 +87,30 @@ class AudioData {
   String? thumbnail;
   String? duration;
   String? createdAt;
-  List<dynamic>? comments;
-AudioData copyWith({  num? id,
-  String? type,
-  String? title,
-  String? url,
-  String? artist,
-  String? thumbnail,
-  String? duration,
-  String? createdAt,
-  List<dynamic>? comments,
-}) => AudioData(  id: id ?? this.id,
-  type: type ?? this.type,
-  title: title ?? this.title,
-  url: url ?? this.url,
-  artist: artist ?? this.artist,
-  thumbnail: thumbnail ?? this.thumbnail,
-  duration: duration ?? this.duration,
-  createdAt: createdAt ?? this.createdAt,
-  comments: comments ?? this.comments,
-);
+  List<CommentModel>? comments;
+
+  AudioData copyWith({
+    num? id,
+    String? type,
+    String? title,
+    String? url,
+    String? artist,
+    String? thumbnail,
+    String? duration,
+    String? createdAt,
+    List<CommentModel>? comments,
+  }) => AudioData(
+    id: id ?? this.id,
+    type: type ?? this.type,
+    title: title ?? this.title,
+    url: url ?? this.url,
+    artist: artist ?? this.artist,
+    thumbnail: thumbnail ?? this.thumbnail,
+    duration: duration ?? this.duration,
+    createdAt: createdAt ?? this.createdAt,
+    comments: comments ?? this.comments,
+  );
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = id;
@@ -119,5 +126,4 @@ AudioData copyWith({  num? id,
     }
     return map;
   }
-
 }

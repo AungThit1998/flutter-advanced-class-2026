@@ -1,3 +1,6 @@
+
+import '../../../comments/data/models/comment_model.dart';
+
 class BlogModel {
   BlogModel({this.total, this.page, this.limit, this.totalPages, this.data});
 
@@ -70,7 +73,7 @@ class BlogData {
     if (json['comments'] != null) {
       comments = [];
       json['comments'].forEach((v) {
-        // comments?.add(Dynamic.fromJson(v));
+        comments?.add(CommentModel.fromJson(v));
       });
     }
     coverImage = json['coverImage'];
@@ -83,7 +86,7 @@ class BlogData {
   String? excerpt;
   String? author;
   String? createdAt;
-  List<dynamic>? comments;
+  List<CommentModel>? comments;
   String? coverImage;
   String? content;
 
@@ -94,7 +97,7 @@ class BlogData {
     String? excerpt,
     String? author,
     String? createdAt,
-    List<dynamic>? comments,
+    List<CommentModel>? comments,
     String? coverImage,
     String? content,
   }) => BlogData(
