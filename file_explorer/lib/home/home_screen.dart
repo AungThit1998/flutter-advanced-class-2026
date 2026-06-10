@@ -1,12 +1,11 @@
 import 'dart:io';
-
 import 'package:file_explorer/home/delete_confirm_dialog.dart';
 import 'package:file_explorer/home/text_edit_screen.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 
 import '../file_services/file_services.dart';
-import 'create_new_file_dialog.dart';
+import 'create_or_rename_file_dialog.dart';
 import 'create_or_rename_folder_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -70,11 +69,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         List<String> directory = _currentLocation.split("/");
                         directory.removeLast();
                         _currentLocation = directory.join("/");
-                        _loadFileAndFolder(_currentLocation);
+
+                        _openFolder(_currentLocation);
                       },
                 icon: Icon(Icons.arrow_back_ios),
               ),
-              title: Text(_currentLocation.isEmpty ? "/" : _currentLocation),
+              title: _PathWidget(
+                currentLocation: _currentLocation,
+                onPathSelected: _openFolder,
+              ),
             ),
           ),
           SliverList.builder(
@@ -153,7 +156,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 subtitle: Text(file.statSync().changed.toString()),
                 trailing: PopupMenuButton<String>(
                   onSelected: (String str) async {
-                    if (str == 'export') {
+                    if (str == 'rename') {
+                      bool isOK = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CreateOrRenameFileDialog(
+                            currentLocation: "$_currentLocation/",
+                            oldName: fileName,
+                          );
+                        },
+                      );
+
+                      if (isOK) {
+                        _loadFileAndFolder(_currentLocation);
+                      }
+                    } else if (str == 'export') {
                       FileSaver.instance.saveAs(
                         name: fileName,
                         bytes: file.readAsBytesSync(),
@@ -204,6 +221,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _openFolder(String path) {
+    _currentLocation = path;
+    _loadFileAndFolder(path);
+  }
+
   void _loadFileAndFolder(String path) async {
     _currentFolderList = await _fileServices.getFolderList(path);
     _currentFileList = await _fileServices.getFileList(path);
@@ -243,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isOK = await showDialog(
       context: context,
       builder: (context) {
-        return CreateNewFileDialog(currentLocation: '$_currentLocation/');
+        return CreateOrRenameFileDialog(currentLocation: '$_currentLocation/');
       },
     );
     if (isOK) {
@@ -305,5 +327,62 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
     }
+  }
+}
+
+class _PathWidget extends StatelessWidget {
+  const _PathWidget({
+    required this.currentLocation,
+    required this.onPathSelected,
+  });
+  final String currentLocation;
+  final Function(String) onPathSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final pathList = currentLocation
+        .split("/")
+        .where((part) => part.isNotEmpty)
+        .toList();
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _PathSegment(
+            label: '/',
+            onTap: currentLocation.isEmpty ? null : () => onPathSelected(""),
+          ),
+          for (int i = 0; i < pathList.length; i++) ...[
+            const Icon(Icons.chevron_right, size: 18),
+            _PathSegment(
+              label: pathList[i],
+              onTap: () {
+                String selectedPath = pathList.take(i + 1).join("/");
+                onPathSelected(selectedPath);
+              },
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _PathSegment extends StatelessWidget {
+  final String label;
+  final VoidCallback? onTap;
+  const _PathSegment({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onTap,
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(label),
+    );
   }
 }
