@@ -1,6 +1,7 @@
 import 'package:book_library_database/view/home/author_page.dart';
 import 'package:book_library_database/view/home/book_page.dart';
 import 'package:book_library_database/view/home/widgets/add_author_sheet.dart';
+import 'package:book_library_database/view/home/widgets/add_book_sheet.dart';
 import 'package:book_library_database/view/home/widgets/fab.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,15 @@ class _HomeState extends State<Home> {
       floatingActionButton: (_index == 0 || _index == 1)
           ? Fab(
               onPress: () {
-                if (_index == 1) {
+                if (_index == 0) {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: (context) {
+                      return AddBookSheet();
+                    },
+                  );
+                } else if (_index == 1) {
                   showModalBottomSheet(
                     isScrollControlled: true,
                     context: context,
