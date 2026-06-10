@@ -4,13 +4,19 @@ import 'package:file_explorer/home/delete_confirm_dialog.dart';
 import 'package:file_explorer/home/text_edit_screen.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
-
 import '../file_services/file_services.dart';
-import 'create_new_file_dialog.dart';
 import 'create_or_rename_folder_dialog.dart';
+import 'create_or_rename_file_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+    required this.themeMode,
+    required this.onThemeChanged,
+  });
+
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeChanged;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -49,11 +55,16 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.note_add_outlined),
           ),
           PopupMenuButton<ThemeMode>(
+            initialValue: widget.themeMode,
+            onSelected: widget.onThemeChanged,
             itemBuilder: (context) {
               return [
-                PopupMenuItem(child: Text("Light Theme")),
-                PopupMenuItem(child: Text("Dark Theme")),
-                PopupMenuItem(child: Text("System")),
+                PopupMenuItem(
+                  value: ThemeMode.light,
+                  child: Text("Light Theme"),
+                ),
+                PopupMenuItem(value: ThemeMode.dark, child: Text("Dark Theme")),
+                PopupMenuItem(value: ThemeMode.system, child: Text("System")),
               ];
             },
           ),
@@ -69,12 +80,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     : () {
                         List<String> directory = _currentLocation.split("/");
                         directory.removeLast();
-                        _currentLocation = directory.join("/");
-                        _loadFileAndFolder(_currentLocation);
+                        _openFolder(directory.join("/"));
                       },
                 icon: Icon(Icons.arrow_back_ios),
               ),
-              title: Text(_currentLocation.isEmpty ? "/" : _currentLocation),
+              title: _PathWidget(
+                currentLocation: _currentLocation,
+                onPathSelected: _openFolder,
+              ),
             ),
           ),
           SliverList.builder(
@@ -85,8 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
               String folderLocation = "$_currentLocation/$folderName";
               return ListTile(
                 onTap: () {
-                  _currentLocation = folderLocation;
-                  _loadFileAndFolder(folderLocation);
+                  _openFolder(folderLocation);
                 },
                 leading: Icon(Icons.folder),
                 title: Text(directory.path.split('/').last),
@@ -177,6 +189,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           context: context,
                         );
                       }
+                    } else if (str == 'rename') {
+                      bool isOK = await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return CreateOrRenameFileDialog(
+                            currentLocation: "$_currentLocation/",
+                            oldName: fileName,
+                          );
+                        },
+                      );
+
+                      if (isOK) {
+                        _loadFileAndFolder(_currentLocation);
+                      }
                     }
                   },
                   itemBuilder: (context) {
@@ -208,6 +234,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _currentFolderList = await _fileServices.getFolderList(path);
     _currentFileList = await _fileServices.getFileList(path);
     setState(() {});
+  }
+
+  void _openFolder(String path) {
+    _currentLocation = path;
+    _loadFileAndFolder(path);
   }
 
   void _createNewFolder(String path) async {
@@ -243,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isOK = await showDialog(
       context: context,
       builder: (context) {
-        return CreateNewFileDialog(currentLocation: '$_currentLocation/');
+        return CreateOrRenameFileDialog(currentLocation: '$_currentLocation/');
       },
     );
     if (isOK) {
@@ -305,5 +336,65 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
     }
+  }
+}
+
+class _PathWidget extends StatelessWidget {
+  const _PathWidget({
+    required this.currentLocation,
+    required this.onPathSelected,
+  });
+
+  final String currentLocation;
+  final ValueChanged<String> onPathSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final pathParts = currentLocation
+        .split("/")
+        .where((part) => part.isNotEmpty)
+        .toList();
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _PathSegment(
+            label: "/",
+            onTap: currentLocation.isEmpty ? null : () => onPathSelected(""),
+          ),
+          for (int index = 0; index < pathParts.length; index++) ...[
+            const Icon(Icons.chevron_right, size: 18),
+            _PathSegment(
+              label: pathParts[index],
+              onTap: () {
+                final selectedPath = pathParts.take(index + 1).join("/");
+                onPathSelected(selectedPath);
+              },
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _PathSegment extends StatelessWidget {
+  const _PathSegment({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onTap,
+      style: TextButton.styleFrom(
+        minimumSize: const Size(0, 36),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(label),
+    );
   }
 }

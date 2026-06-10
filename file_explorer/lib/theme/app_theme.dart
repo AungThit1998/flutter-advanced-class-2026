@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+  AppTheme._();
   static ThemeData lightTheme() {
     return ThemeData.light().copyWith(
       appBarTheme: AppBarTheme(
@@ -9,8 +10,9 @@ class AppTheme {
       ),
       listTileTheme: ListTileThemeData(
         iconColor: Colors.indigoAccent,
-        titleTextStyle: TextStyle(color: Colors.indigo),
-        subtitleTextStyle: TextStyle(color: Colors.indigoAccent),
+        // titleTextStyle: TextStyle(color: Colors.indigo),
+        // subtitleTextStyle: TextStyle(color: Colors.indigoAccent),
+        textColor: Colors.indigo,
       ),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(foregroundColor: Colors.white),

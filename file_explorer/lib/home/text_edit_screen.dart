@@ -37,7 +37,7 @@ class _TextEditScreenState extends State<TextEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.currentFileLocation),
+        // title: Text(widget.currentFileLocation),
         actions: [
           IconButton(
             onPressed: _hadEdit
