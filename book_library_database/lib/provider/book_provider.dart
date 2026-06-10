@@ -29,11 +29,11 @@ class BookProvider extends ChangeNotifier {
     return count;
   }
 
-  // Future<int> updateFavourite(int id, int isFav) async {
-  //   final result = await _dbService.updateFavourite(id, isFav);
-  //   getFavourite(id);
-  //   return result;
-  // }
+  Future<int> updateFavourite(int id, int isFav) async {
+    final result = await _dbService.updateFavourite(id, isFav);
+    getFavourite(id);
+    return result;
+  }
 
   Future<int> getFavourite(int id) async {
     isDetailFav = await _dbService.getFavourite(id);

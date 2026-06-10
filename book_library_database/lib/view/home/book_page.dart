@@ -69,6 +69,7 @@ class _BookPageState extends State<BookPage> {
                       SizedBox(width: 16),
                       Expanded(
                         child: Column(
+                          spacing: 8,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -76,9 +77,9 @@ class _BookPageState extends State<BookPage> {
                               overflow: TextOverflow.ellipsis,
                               title,
                               style: TextStyle(
-                                fontSize: 17,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
                                 color: themeTokens.onBackground,
-                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
@@ -86,14 +87,70 @@ class _BookPageState extends State<BookPage> {
                               overflow: TextOverflow.ellipsis,
                               description,
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 18,
                                 color: themeTokens.textSecondary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+                            Row(
+                              spacing: 8,
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: themeTokens.primary.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                      vertical: 4.0,
+                                    ),
+                                    child: Text(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      "EDUCATION",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: themeTokens.primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: themeTokens.primary.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                      vertical: 4.0,
+                                    ),
+                                    child: Text(
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      "TECH",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: themeTokens.primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
+
                       SizedBox(width: 16),
                       Column(
                         children: [

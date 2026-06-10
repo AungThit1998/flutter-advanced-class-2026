@@ -29,7 +29,6 @@ class _AuthorDetailState extends State<AuthorDetail> {
   @override
   Widget build(BuildContext context) {
     AppThemeTokens themeTokens = Theme.of(context).extension<AppThemeTokens>()!;
-    AuthorProvider authorProvider = Provider.of(context, listen: false);
     AuthorModel author = widget.authorData;
     String id = "AUTHOR${author.id.toString()}";
     String name = author.name;
@@ -102,6 +101,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 25,
                   children: [
                     Text(
@@ -115,7 +115,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                     Text(
                       "Prefessor of Computer Science",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: themeTokens.primary,
                       ),
@@ -147,7 +147,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                       ],
                     ),
                     Container(
-                      width: MediaQuery.sizeOf(context).width * 0.5,
+                      width: MediaQuery.sizeOf(context).width * 0.7,
                       decoration: BoxDecoration(
                         color: themeTokens.surface,
                         border: Border.all(
@@ -171,7 +171,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                                   'ADMIN',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: themeTokens.onBackground,
                                   ),
@@ -180,7 +180,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                                   'ROLE',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     color: themeTokens.onBackground,
                                   ),
                                 ),
@@ -194,7 +194,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                                   'ACTIVE',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: themeTokens.onBackground,
                                   ),
@@ -203,7 +203,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                                   'STATUS',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     color: themeTokens.onBackground,
                                   ),
                                 ),
@@ -217,7 +217,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                       "Payload Output",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: themeTokens.onBackground,
                       ),

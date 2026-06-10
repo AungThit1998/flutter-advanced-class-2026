@@ -92,13 +92,14 @@ class _BookDetailState extends State<BookDetail> {
             ),
           ),
           Positioned(
-            bottom: -350,
+            bottom: -380,
             left: 30,
             right: 30,
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 25,
                   children: [
                     Text(
@@ -110,9 +111,9 @@ class _BookDetailState extends State<BookDetail> {
                       ),
                     ),
                     Text(
-                      "Prefessor of Computer Science",
+                      "Author:",
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: themeTokens.primary,
                       ),
@@ -144,7 +145,7 @@ class _BookDetailState extends State<BookDetail> {
                       ],
                     ),
                     Container(
-                      width: MediaQuery.sizeOf(context).width * 0.5,
+                      width: MediaQuery.sizeOf(context).width * 0.9,
                       decoration: BoxDecoration(
                         color: themeTokens.surface,
                         border: Border.all(
@@ -165,19 +166,19 @@ class _BookDetailState extends State<BookDetail> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  'ADMIN',
+                                  '1',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: themeTokens.onBackground,
                                   ),
                                 ),
                                 Text(
-                                  'ROLE',
+                                  'VERSION',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     color: themeTokens.onBackground,
                                   ),
                                 ),
@@ -188,10 +189,33 @@ class _BookDetailState extends State<BookDetail> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'ACTIVE',
+                                  '342b',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: themeTokens.onBackground,
+                                  ),
+                                ),
+                                Text(
+                                  'SIZE',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: themeTokens.onBackground,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: .center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'OK',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: themeTokens.onBackground,
                                   ),
@@ -200,7 +224,7 @@ class _BookDetailState extends State<BookDetail> {
                                   'STATUS',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 16,
                                     color: themeTokens.onBackground,
                                   ),
                                 ),
@@ -214,7 +238,7 @@ class _BookDetailState extends State<BookDetail> {
                       "Payload Output",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: themeTokens.onBackground,
                       ),

@@ -69,6 +69,7 @@ class _AuthorPageState extends State<AuthorPage> {
                       SizedBox(width: 16),
                       Expanded(
                         child: Column(
+                          spacing: 8,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -76,7 +77,7 @@ class _AuthorPageState extends State<AuthorPage> {
                               overflow: TextOverflow.ellipsis,
                               name,
                               style: TextStyle(
-                                fontSize: 17,
+                                fontSize: 24,
                                 color: themeTokens.onBackground,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -86,9 +87,33 @@ class _AuthorPageState extends State<AuthorPage> {
                               overflow: TextOverflow.ellipsis,
                               description,
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 color: themeTokens.textSecondary,
                                 fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: themeTokens.primary.withValues(
+                                  alpha: 0.1,
+                                ),
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 6.0,
+                                ),
+                                child: Text(
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  "EDUCATION",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: themeTokens.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
