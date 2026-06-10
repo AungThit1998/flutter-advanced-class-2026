@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:book_library_database/const/theme/app_theme_token.dart';
 import 'package:book_library_database/provider/author_provider.dart';
 import 'package:book_library_database/view/home/widgets/input_filed_widget.dart';
@@ -8,7 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddAuthorSheet extends StatefulWidget {
-  const AddAuthorSheet({super.key});
+  final int? id;
+  final String? name;
+  final String? description;
+  const AddAuthorSheet({super.key, this.id, this.name, this.description});
 
   @override
   State<AddAuthorSheet> createState() => _AddAuthorSheetState();
@@ -20,6 +22,10 @@ class _AddAuthorSheetState extends State<AddAuthorSheet> {
   Uint8List? _photo;
   @override
   void initState() {
+    if (widget.name != null && widget.description != null) {
+      _nameController.text = widget.name!;
+      _descController.text = widget.description!;
+    }
     super.initState();
   }
 
@@ -45,7 +51,9 @@ class _AddAuthorSheetState extends State<AddAuthorSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Insert Author Record",
+                (widget.name != null && widget.description != null)
+                    ? "Update Author Record"
+                    : "Insert Author Record",
                 style: TextStyle(
                   fontSize: 20,
                   color: themeTokens.onBackground,
@@ -74,25 +82,29 @@ class _AddAuthorSheetState extends State<AddAuthorSheet> {
             controller: _descController,
           ),
           SizedBox(height: 8),
-          Text(
-            "Author Photo (Optional)",
-            style: TextStyle(
-              color: themeTokens.textSecondary,
-              fontWeight: FontWeight.w500,
+          if (widget.name == null && widget.description == null)
+            Text(
+              "Author Photo (Optional)",
+              style: TextStyle(
+                color: themeTokens.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          TextButton(
-            onPressed: () async {
-              ImagePicker picker = ImagePicker();
-              XFile? file = await picker.pickImage(source: ImageSource.gallery);
-              _photo = await file?.readAsBytes();
-              if (_photo != null) {
-                setState(() {});
-              }
-            },
-            child: Text("Upload Photo"),
-          ),
-          SizedBox(height: 4),
+          if (widget.name == null && widget.description == null)
+            TextButton(
+              onPressed: () async {
+                ImagePicker picker = ImagePicker();
+                XFile? file = await picker.pickImage(
+                  source: ImageSource.gallery,
+                );
+                _photo = await file?.readAsBytes();
+                if (_photo != null) {
+                  setState(() {});
+                }
+              },
+              child: Text("Upload Photo"),
+            ),
+          SizedBox(height: 16),
           if (_photo != null)
             Center(child: Image.memory(_photo!, width: 200, height: 200)),
           if (_photo != null) SizedBox(height: 4),
@@ -100,7 +112,19 @@ class _AddAuthorSheetState extends State<AddAuthorSheet> {
             onTap: () async {
               String name = _nameController.text.trim();
               String desc = _descController.text.trim();
-              if (name.isNotEmpty && desc.isNotEmpty) {
+              if (widget.name != null && widget.description != null) {
+                int result = await authorProvider.updateAuthor(
+                  id: widget.id!,
+                  name: name,
+                  description: desc,
+                );
+                if (result > 0 && context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text("Update success")));
+                }
+              } else if (name.isNotEmpty && desc.isNotEmpty) {
                 int result = await authorProvider.saveAuthor(
                   name: name,
                   description: desc,

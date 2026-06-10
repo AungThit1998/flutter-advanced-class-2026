@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:book_library_database/const/theme/app_theme_token.dart';
 import 'package:book_library_database/data/aithor_model.dart';
 import 'package:book_library_database/provider/author_provider.dart';
@@ -32,9 +31,11 @@ class _AuthorDetailState extends State<AuthorDetail> {
     AppThemeTokens themeTokens = Theme.of(context).extension<AppThemeTokens>()!;
     AuthorProvider authorProvider = Provider.of(context, listen: false);
     AuthorModel author = widget.authorData;
+    String id = "AUTHOR${author.id.toString()}";
     String name = author.name;
     String description = author.description;
     Uint8List? photo = author.photo;
+
     return Scaffold(
       body: Stack(
         clipBehavior: Clip.none,
@@ -95,28 +96,138 @@ class _AuthorDetailState extends State<AuthorDetail> {
           ),
           Positioned(
             bottom: -350,
-            left: 50,
-            right: 50,
-            height: 400,
+            left: 30,
+            right: 30,
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(30.0),
                 child: Column(
+                  spacing: 25,
                   children: [
                     Text(
                       name,
                       style: TextStyle(
                         fontSize: 32,
+                        fontWeight: FontWeight.bold,
                         color: themeTokens.onBackground,
                       ),
                     ),
-                    SizedBox(height: 8.0),
+                    Text(
+                      "Prefessor of Computer Science",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: themeTokens.primary,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: themeTokens.surface,
+                            border: Border.all(
+                              width: 1,
+                              color: themeTokens.surface,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'ID: $id',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: themeTokens.onBackground,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: MediaQuery.sizeOf(context).width * 0.5,
+                      decoration: BoxDecoration(
+                        color: themeTokens.surface,
+                        border: Border.all(
+                          width: 1,
+                          color: themeTokens.surface,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: .spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 16,
+                          children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'ADMIN',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: themeTokens.onBackground,
+                                  ),
+                                ),
+                                Text(
+                                  'ROLE',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: themeTokens.onBackground,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: .center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'ACTIVE',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: themeTokens.onBackground,
+                                  ),
+                                ),
+                                Text(
+                                  'STATUS',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: themeTokens.onBackground,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Payload Output",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: themeTokens.onBackground,
+                      ),
+                    ),
                     Text(
                       description,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16,
-                        color: themeTokens.primary,
+                        fontSize: 18,
+                        color: themeTokens.onBackground,
                       ),
                     ),
                   ],

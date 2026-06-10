@@ -46,4 +46,18 @@ class AuthorProvider extends ChangeNotifier {
     getAllAuthor();
     return result;
   }
+
+  Future<int> updateAuthor({
+    int id = 1,
+    String name = "",
+    String description = "",
+  }) async {
+    int result = await _dbService.updateAuthor(
+      id: id,
+      name: name,
+      description: description,
+    );
+    getAllAuthor();
+    return result;
+  }
 }

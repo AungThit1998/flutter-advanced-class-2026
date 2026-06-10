@@ -4,6 +4,7 @@ import 'package:book_library_database/const/theme/app_theme_token.dart';
 import 'package:book_library_database/data/aithor_model.dart';
 import 'package:book_library_database/provider/author_provider.dart';
 import 'package:book_library_database/view/home/author_detail.dart';
+import 'package:book_library_database/view/home/widgets/add_author_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,7 @@ class _AuthorPageState extends State<AuthorPage> {
     return ColoredBox(
       color: themeTokens.background,
       child: Consumer<AuthorProvider>(
+        // ignore: unnecessary_underscores
         builder: (_, provider, __) {
           List<AuthorModel> authors = provider.authors;
           return ListView.builder(
@@ -62,7 +64,7 @@ class _AuthorPageState extends State<AuthorPage> {
                       if (photo != null)
                         CircleAvatar(
                           radius: 40,
-                          backgroundImage: MemoryImage(photo!),
+                          backgroundImage: MemoryImage(photo),
                         ),
                       SizedBox(width: 16),
                       Expanded(
@@ -95,7 +97,22 @@ class _AuthorPageState extends State<AuthorPage> {
                       SizedBox(width: 16),
                       Column(
                         children: [
-                          IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+                          IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (context) {
+                                  return AddAuthorSheet(
+                                    id: author.id,
+                                    name: author.name,
+                                    description: author.description,
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icon(Icons.edit),
+                          ),
                           IconButton(
                             onPressed: () {
                               provider.deleteAuthor(author.id);
