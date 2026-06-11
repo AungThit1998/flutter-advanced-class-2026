@@ -111,7 +111,7 @@ class _BookDetailState extends State<BookDetail> {
                       ),
                     ),
                     Text(
-                      "Author:",
+                      "Author: Dr.Alan Turing",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

@@ -40,6 +40,7 @@ class _BookPageState extends State<BookPage> {
               Uint8List? cover = book.cover;
               String title = book.title!;
               String description = book.description!;
+              String reference = book.reference!;
               return InkWell(
                 onTap: () {
                   Navigator.push(
@@ -62,9 +63,13 @@ class _BookPageState extends State<BookPage> {
                   child: Row(
                     children: [
                       if (cover != null)
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundImage: MemoryImage(cover),
+                        SizedBox(
+                          width: 90,
+                          height: 100,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.memory(cover, fit: BoxFit.cover),
+                          ),
                         ),
                       SizedBox(width: 16),
                       Expanded(
@@ -77,7 +82,7 @@ class _BookPageState extends State<BookPage> {
                               overflow: TextOverflow.ellipsis,
                               title,
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                                 color: themeTokens.onBackground,
                               ),
@@ -85,7 +90,7 @@ class _BookPageState extends State<BookPage> {
                             Text(
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              description,
+                              "Author: Dr. Alan Turing",
                               style: TextStyle(
                                 fontSize: 18,
                                 color: themeTokens.textSecondary,
@@ -112,7 +117,7 @@ class _BookPageState extends State<BookPage> {
                                     child: Text(
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      "EDUCATION",
+                                      reference,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: themeTokens.primary,
@@ -161,9 +166,11 @@ class _BookPageState extends State<BookPage> {
                                 context: context,
                                 builder: (context) {
                                   return AddBookSheet(
-                                    id: 1,
-                                    name: book.name,
+                                    id: book.id?.toInt(),
+                                    title: book.title,
                                     description: book.description,
+                                    reference: book.reference,
+                                    authorId: book.authorId?.toInt(),
                                   );
                                 },
                               );

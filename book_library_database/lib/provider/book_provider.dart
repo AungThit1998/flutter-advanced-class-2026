@@ -18,12 +18,14 @@ class BookProvider extends ChangeNotifier {
     required String description,
     Uint8List? cover,
     int authorId = 1,
+    required String reference,
   }) async {
     final int count = await _dbService.insertBook(
       name: name,
       description: description,
       cover: cover,
       authorId: 1,
+      reference: reference,
     );
     getAllBook();
     return count;
@@ -49,13 +51,17 @@ class BookProvider extends ChangeNotifier {
 
   Future<int> updateBook({
     int id = 1,
-    String name = "",
+    String title = "",
     String description = "",
+    int authorId = 1,
+    String reference = "",
   }) async {
     int result = await _dbService.updateBook(
       id: id,
-      name: name,
+      title: title,
       description: description,
+      authorId: authorId,
+      reference: reference,
     );
     getAllBook();
     return result;

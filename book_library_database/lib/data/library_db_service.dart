@@ -35,6 +35,7 @@ class LibraryDbService {
     );
   }
 
+  //  The value stored in books.author_id must exist in authors.id in author table
   static Future<void> _createBookTable() async {
     await _database.execute('''
          CREATE TABLE IF NOT EXISTS $_bookTable (
@@ -44,6 +45,7 @@ class LibraryDbService {
                cover BLOB,
                 fav INTEGER,
                author_id INTEGER NOT NULL,
+                reference TEXT NOT NULL,
                FOREIGN KEY(author_id) REFERENCES authors(id) ON DELETE RESTRICT  
              );
       ''');
@@ -65,10 +67,11 @@ class LibraryDbService {
     required String description,
     Uint8List? cover,
     required int authorId,
+    required String reference,
   }) {
     return _database.rawInsert(
-      'INSERT INTO $_bookTable (title, description, cover,fav, author_id) VALUES (?,?,?,?,?);',
-      [name, description, cover, null, authorId],
+      'INSERT INTO $_bookTable (title, description, cover,fav, author_id,reference) VALUES (?,?,?,?,?,?);',
+      [name, description, cover, null, authorId, reference],
     );
   }
 
@@ -145,12 +148,19 @@ class LibraryDbService {
 
   Future<int> updateBook({
     required int id,
-    required String name,
+    required String title,
     required String description,
+    required int authorId,
+    required String reference,
   }) {
     return _database.update(
       _bookTable,
-      {"name": name, "description": description},
+      {
+        "title": title,
+        "description": description,
+        "author_id": authorId,
+        "reference": reference,
+      },
       where: 'id = ?',
       whereArgs: [id],
     );

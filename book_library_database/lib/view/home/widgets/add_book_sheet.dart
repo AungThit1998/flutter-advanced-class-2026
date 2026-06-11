@@ -8,16 +8,26 @@ import 'package:provider/provider.dart';
 
 class AddBookSheet extends StatefulWidget {
   final int? id;
-  final String? name;
+  final String? title;
   final String? description;
-  const AddBookSheet({super.key, this.id, this.name, this.description});
+  final String? reference;
+  final int? authorId;
+
+  const AddBookSheet({
+    super.key,
+    this.id,
+    this.title,
+    this.description,
+    this.reference,
+    this.authorId,
+  });
 
   @override
   State<AddBookSheet> createState() => _AddBookSheetState();
 }
 
 class _AddBookSheetState extends State<AddBookSheet> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _referenceController = TextEditingController();
   final TextEditingController _tagController = TextEditingController();
@@ -25,9 +35,11 @@ class _AddBookSheetState extends State<AddBookSheet> {
   Uint8List? _photo;
   @override
   void initState() {
-    if (widget.name != null && widget.description != null) {
-      _nameController.text = widget.name!;
+    if (widget.title != null && widget.description != null) {
+      _titleController.text = widget.title!;
       _descController.text = widget.description!;
+      _referenceController.text = widget.reference!;
+      _tagController.text = widget.authorId.toString();
     }
     super.initState();
   }
@@ -54,7 +66,7 @@ class _AddBookSheetState extends State<AddBookSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                (widget.name != null && widget.description != null)
+                (widget.title != null && widget.description != null)
                     ? "Update Book Record"
                     : "Insert Book Record",
                 style: TextStyle(
@@ -75,7 +87,7 @@ class _AddBookSheetState extends State<AddBookSheet> {
             title: "Record Name",
             hintName: "Enter Name...",
             maxLines: 1,
-            controller: _nameController,
+            controller: _titleController,
           ),
           SizedBox(height: 8),
           InputFieldWidget(
@@ -99,7 +111,7 @@ class _AddBookSheetState extends State<AddBookSheet> {
             controller: _descController,
           ),
           SizedBox(height: 8),
-          if (widget.name == null && widget.description == null)
+          if (widget.title == null && widget.description == null)
             Text(
               "Cover Photo (Optional)",
               style: TextStyle(
@@ -107,7 +119,7 @@ class _AddBookSheetState extends State<AddBookSheet> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-          if (widget.name == null && widget.description == null)
+          if (widget.title == null && widget.description == null)
             TextButton(
               onPressed: () async {
                 ImagePicker picker = ImagePicker();
@@ -127,15 +139,17 @@ class _AddBookSheetState extends State<AddBookSheet> {
           if (_photo != null) SizedBox(height: 4),
           InkWell(
             onTap: () async {
-              String name = _nameController.text.trim();
+              String title = _titleController.text.trim();
               String desc = _descController.text.trim();
               String reference = _referenceController.text.trim();
-              String tags = _tagController.text.trim();
-              if (widget.name != null && widget.description != null) {
+              int tags = int.parse(_tagController.text);
+              if (widget.title != null && widget.description != null) {
                 int result = await bookProvider.updateBook(
                   id: widget.id!,
-                  name: name,
+                  title: title,
                   description: desc,
+                  reference: reference,
+                  authorId: tags,
                 );
                 if (result > 0 && context.mounted) {
                   Navigator.pop(context);
@@ -143,15 +157,16 @@ class _AddBookSheetState extends State<AddBookSheet> {
                     context,
                   ).showSnackBar(SnackBar(content: Text("Update success")));
                 }
-              } else if (name.isNotEmpty &&
+              } else if (title.isNotEmpty &&
                   desc.isNotEmpty &&
                   reference.isNotEmpty &&
-                  tags.isNotEmpty) {
+                  tags != 0) {
                 int result = await bookProvider.saveBook(
-                  name: name,
+                  name: title,
                   description: desc,
                   cover: _photo,
-                  authorId: 1,
+                  authorId: tags,
+                  reference: reference,
                 );
                 if (result > 0 && context.mounted) {
                   Navigator.pop(context);
