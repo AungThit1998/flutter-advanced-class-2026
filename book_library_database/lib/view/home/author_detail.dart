@@ -61,7 +61,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back),
+                icon: Icon(Icons.arrow_back, color: themeTokens.primary),
               ),
             ),
           ),
@@ -86,7 +86,7 @@ class _AuthorDetailState extends State<AuthorDetail> {
                       );
                     },
                     icon: isFav
-                        ? Icon(Icons.favorite)
+                        ? Icon(Icons.favorite, color: themeTokens.primary)
                         : Icon(Icons.favorite_border),
                   );
                 },
@@ -94,10 +94,11 @@ class _AuthorDetailState extends State<AuthorDetail> {
             ),
           ),
           Positioned(
-            bottom: -350,
+            bottom: -380,
             left: 30,
             right: 30,
             child: Card(
+              color: themeTokens.background,
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(

@@ -13,6 +13,11 @@ class BookProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void getAllFavBook() async {
+    books = await _dbService.getAllFavBooks();
+    notifyListeners();
+  }
+
   Future<int> saveBook({
     required String name,
     required String description,

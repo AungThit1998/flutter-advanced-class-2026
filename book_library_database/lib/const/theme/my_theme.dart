@@ -32,10 +32,10 @@ class MyTheme {
       scaffoldBackgroundColor: Color(0xFF0F1016),
       extensions: const <ThemeExtension<dynamic>>[AppThemeTokens.dark],
       cardTheme: CardThemeData(
-        color: Color(0xFF0F1016),
+        color: Colors.white.withValues(alpha: 0.05),
         elevation: 9.0,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.grey, width: 0.3),
+          // side: BorderSide(color: Colors.grey, width: 0.3),
           borderRadius: BorderRadius.circular(30.0),
         ),
       ),

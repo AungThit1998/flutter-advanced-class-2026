@@ -15,6 +15,11 @@ class AuthorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void getAllFavAuthor() async {
+    authors = await _dbService.getAllFavAuthor();
+    notifyListeners();
+  }
+
   Future<int> saveAuthor({
     required String name,
     required String description,

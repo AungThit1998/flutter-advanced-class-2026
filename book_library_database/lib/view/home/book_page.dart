@@ -39,8 +39,9 @@ class _BookPageState extends State<BookPage> {
               BookModel book = books[position];
               Uint8List? cover = book.cover;
               String title = book.title!;
-              String description = book.description!;
+              // String description = book.description!;
               String reference = book.reference!;
+              List<String> referenceList = reference.split(",");
               return InkWell(
                 onTap: () {
                   Navigator.push(
@@ -98,26 +99,25 @@ class _BookPageState extends State<BookPage> {
                               ),
                             ),
                             Row(
-                              spacing: 8,
                               mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: themeTokens.primary.withValues(
-                                      alpha: 0.2,
+                              children: referenceList.map((e) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: themeTokens.primary.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(24),
                                     ),
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0,
-                                      vertical: 4.0,
+                                      horizontal: 8,
+                                      vertical: 4,
                                     ),
                                     child: Text(
+                                      e,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      reference,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: themeTokens.primary,
@@ -125,32 +125,8 @@ class _BookPageState extends State<BookPage> {
                                       ),
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: themeTokens.primary.withValues(
-                                      alpha: 0.2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0,
-                                      vertical: 4.0,
-                                    ),
-                                    child: Text(
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      "TECH",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: themeTokens.primary,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                );
+                              }).toList(),
                             ),
                           ],
                         ),

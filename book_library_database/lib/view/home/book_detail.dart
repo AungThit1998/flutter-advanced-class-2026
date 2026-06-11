@@ -59,7 +59,7 @@ class _BookDetailState extends State<BookDetail> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back),
+                icon: Icon(Icons.arrow_back, color: themeTokens.primary),
               ),
             ),
           ),
@@ -73,18 +73,18 @@ class _BookDetailState extends State<BookDetail> {
                 color: themeTokens.backBtnBg,
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: Consumer<AuthorProvider>(
+              child: Consumer<BookProvider>(
                 builder: (context, provider, child) {
                   bool isFav = provider.isDetailFav == 1;
                   return IconButton(
                     onPressed: () {
-                      // provider.updateFavourite(
-                      //   widget.bookData.id,
-                      //   isFav ? 0 : 1,
-                      // );
+                      provider.updateFavourite(
+                        widget.bookData.id?.toInt() ?? 0,
+                        isFav ? 0 : 1,
+                      );
                     },
                     icon: isFav
-                        ? Icon(Icons.favorite)
+                        ? Icon(Icons.favorite, color: themeTokens.primary)
                         : Icon(Icons.favorite_border),
                   );
                 },
@@ -96,6 +96,7 @@ class _BookDetailState extends State<BookDetail> {
             left: 30,
             right: 30,
             child: Card(
+              color: themeTokens.background,
               child: Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
