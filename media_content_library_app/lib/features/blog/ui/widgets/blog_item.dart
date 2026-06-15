@@ -14,7 +14,7 @@ class BlogItem extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isMobile = ResponsiveUtils.isMobile(context);
     return InkWell(
-      onTap: (){
+      onTap: () {
         context.push("/detail/${blogData.type}/${blogData.id}");
       },
       child: Card(
@@ -43,19 +43,19 @@ class BlogItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _MetaItem(
-                      icon: Icon(Icons.person_outline,size: 14,),
+                      icon: Icon(Icons.person_outline, size: 14),
                       value: blogData.author ?? "",
                     ),
                   ),
                   Expanded(
                     child: _MetaItem(
-                      icon: Icon(Icons.mode_comment_outlined,size: 14,),
+                      icon: Icon(Icons.mode_comment_outlined, size: 14),
                       value: blogData.comments?.length.toString() ?? "",
                     ),
                   ),
                   Expanded(
                     child: _MetaItem(
-                      icon: Icon(Icons.calendar_today_outlined,size: 14,),
+                      icon: Icon(Icons.calendar_today_outlined, size: 14),
                       value: blogData.createdAt?.split("T")[0] ?? "",
                     ),
                   ),
@@ -70,7 +70,7 @@ class BlogItem extends StatelessWidget {
 }
 
 class _MetaItem extends StatelessWidget {
-  const _MetaItem({super.key, required this.icon, required this.value});
+  const _MetaItem({required this.icon, required this.value});
 
   final Icon icon;
   final String value;

@@ -7,7 +7,6 @@ import '../../../../features/audio/data/model/audio_model.dart';
 import '../../../../features/audio/notifiers/audio_list/audio_notifier.dart';
 import '../../../../features/audio/notifiers/audio_list/audio_state_model.dart';
 import '../../../../features/audio/ui/widgets/mobile_audio_list_widget.dart';
-import '../widgets/audio_item.dart';
 
 class AudioScreen extends ConsumerStatefulWidget {
   const AudioScreen({super.key});
@@ -34,7 +33,28 @@ class _AudioScreenState extends ConsumerState<AudioScreen> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     AudioStateModel stateModel = ref.watch(_audioProvider);
     if (stateModel.isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+                color: colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "Loading Audio...",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      );
     }
     if (stateModel.isFailed) {
       return TryAgainWidget(
@@ -47,7 +67,33 @@ class _AudioScreenState extends ConsumerState<AudioScreen> {
         ref.watch(_audioProvider).audioModel?.data ?? [];
 
     if (audioList.isEmpty) {
-      return Center(child: Text("Empty Audio List"));
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.music_note_outlined,
+              size: 80,
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "No Audio Found",
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "There are no audio items available at the moment.",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
     }
 
     return ResponsiveLayout(

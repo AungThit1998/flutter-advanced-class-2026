@@ -34,48 +34,79 @@ class _DesktopAudioListState extends State<DesktopAudioList> {
     return Column(
       children: [
         Expanded(
-          child: GridView.builder(
+          child: Scrollbar(
             controller: _scrollController,
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 350,
-              mainAxisExtent: 300,
-            ),
-            itemCount: widget.audioList.length + 1,
-            itemBuilder: (context, index) {
-              if (index == widget.audioList.length) {
-                bool isLoadCompleted = index == widget.model.audioModel?.total;
-                if (_loadCompleted != isLoadCompleted) {
-                  Future(() {
-                    setState(() {
-                      _loadCompleted = isLoadCompleted;
+            thumbVisibility: true,
+            trackVisibility: true,
+            child: GridView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 320,
+                mainAxisExtent: 280,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+              ),
+              itemCount: widget.audioList.length + 1,
+              itemBuilder: (context, index) {
+                if (index == widget.audioList.length) {
+                  bool isLoadCompleted =
+                      index == widget.model.audioModel?.total;
+                  if (_loadCompleted != isLoadCompleted) {
+                    Future(() {
+                      setState(() {
+                        _loadCompleted = isLoadCompleted;
+                      });
                     });
-                  });
+                  }
+                  if (widget.model.isPaginateLoading == false &&
+                      !isLoadCompleted) {
+                    Future(() {
+                      widget.ref
+                          .read(widget._audioProvider.notifier)
+                          .loadMore();
+                    });
+                  }
+                  return SizedBox.shrink();
                 }
-                if (widget.model.isPaginateLoading == false &&
-                    !isLoadCompleted) {
-                  Future(() {
-                    widget.ref.read(widget._audioProvider.notifier).loadMore();
-                  });
-                }
-                return SizedBox.shrink();
-              }
-              AudioData data = widget.audioList[index];
-              return AudioItem(data: data, colorScheme: widget.colorScheme);
-            },
+                AudioData data = widget.audioList[index];
+                return AudioItem(data: data, colorScheme: widget.colorScheme);
+              },
+            ),
           ),
         ),
         if (_loadCompleted)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Load Completed"),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              color: widget.colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.5,
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                "All items loaded",
+                style: TextStyle(
+                  color: widget.colorScheme.onSurfaceVariant,
+                  fontSize: 14,
+                ),
+              ),
             ),
           ),
         if (widget.model.isPaginateLoading)
           Container(
-            padding: EdgeInsets.all(8.0),
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: widget.colorScheme.primary,
+                ),
+              ),
+            ),
           ),
       ],
     );

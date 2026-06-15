@@ -5,7 +5,6 @@ import 'package:media_content_library_app/const/widgets/common/try_again_widget.
 import 'package:media_content_library_app/features/blog/data/model/blog_model.dart';
 import 'package:media_content_library_app/features/blog/notifiers/blog_list/blog_list_notifier.dart';
 import 'package:media_content_library_app/features/blog/notifiers/blog_list/blog_list_state_model.dart';
-import 'package:media_content_library_app/features/blog/ui/widgets/blog_item.dart';
 
 import '../widgets/desktop_blog_list_widget.dart';
 import '../widgets/mobile_blog_list_widget.dart';
@@ -37,9 +36,11 @@ class _BlogScreenState extends ConsumerState<BlogScreen> {
       return Center(child: CircularProgressIndicator());
     }
     if (model.isError) {
-      return TryAgainWidget(onTryAgain: (){
-        ref.read(_blogListProvider.notifier).getBLogList();
-      });
+      return TryAgainWidget(
+        onTryAgain: () {
+          ref.read(_blogListProvider.notifier).getBLogList();
+        },
+      );
     } else {
       List<BlogData>? blogList = model.blogModel?.data ?? [];
       if (blogList.isEmpty) {

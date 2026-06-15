@@ -1,7 +1,5 @@
 import 'package:media_content_library_app/features/audio/data/model/audio_model.dart';
 
-import '../../../blog/data/model/blog_model.dart';
-
 class AudioStateModel {
   final bool isLoading;
   final bool isPaginateLoading;
