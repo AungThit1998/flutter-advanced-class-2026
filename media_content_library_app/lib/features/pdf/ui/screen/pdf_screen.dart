@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:media_content_library_app/const/responsive/responsive_layout.dart';
 import 'package:media_content_library_app/const/widgets/common/try_again_widget.dart';
 import 'package:media_content_library_app/features/pdf/data/model/pdf_model.dart';
 import 'package:media_content_library_app/features/pdf/notifier/pdf_list/pdf_list_state_model.dart';
 import 'package:media_content_library_app/features/pdf/ui/widget/pdf_item.dart';
 
 import '../../notifier/pdf_list/pdf_list_notifier.dart';
+import '../widget/desktop_pdf_list_widget.dart';
+import '../widget/mobile_pdf_list_widget.dart';
 
 class PdfScreen extends ConsumerStatefulWidget {
   const PdfScreen({super.key});
@@ -39,12 +42,51 @@ class _PdfScreenState extends ConsumerState<PdfScreen> {
       );
     }
     List<PdfData> pdfList = stateModel.pdfModel?.data ?? [];
-    return ListView.builder(
-      itemCount: pdfList.length,
-      itemBuilder: (context, position) {
-        PdfData data = pdfList[position];
-        return PdfItem(data: data, colorScheme: colorScheme);
-      },
+
+    if (pdfList.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.file_present_outlined,
+              size: 80,
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "No pdf Found",
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "There are no pdf items available at the moment.",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+    return ResponsiveLayout(
+      mobile: MobilePdfList(
+        pdfList: pdfList,
+        colorScheme: colorScheme,
+        ref: ref,
+        model: stateModel,
+        pdfProvider: _provider,
+      ),
+      desktop: DesktopPdfList(
+        pdfList: pdfList,
+        colorScheme: colorScheme,
+        ref: ref,
+        pdfProvider: _provider,
+        model: stateModel,
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:media_content_library_app/features/pdf/data/model/pdf_model.dart
 
 class PdfListStateModel {
   final bool isLoading;
+  final bool isPaginateLoading;
   final bool isFailed;
   final bool isSuccess;
   final PdfModel? pdfModel;
@@ -11,10 +12,13 @@ class PdfListStateModel {
     this.isFailed = false,
     this.isSuccess = false,
     this.pdfModel,
+    this.isPaginateLoading = false,
   });
 
   PdfListStateModel copyWith({
     bool? isLoading,
+    bool? isPaginateLoading,
+
     bool? isFailed,
     bool? isSuccess,
     PdfModel? pdfModel,
@@ -24,6 +28,7 @@ class PdfListStateModel {
       isFailed: isFailed ?? this.isFailed,
       isSuccess: isSuccess ?? this.isSuccess,
       pdfModel: pdfModel ?? this.pdfModel,
+      isPaginateLoading: isPaginateLoading ?? this.isPaginateLoading,
     );
   }
 }

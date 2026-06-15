@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:media_content_library_app/const/apis/api_const.dart';
 import 'package:media_content_library_app/const/widgets/common/try_again_widget.dart';
 import 'package:media_content_library_app/features/pdf/data/model/pdf_model.dart';
 import 'package:media_content_library_app/features/pdf/notifier/pdf_detail/pdf_detail_state_model.dart';
@@ -59,13 +58,12 @@ class _PdfDetailScreenState extends ConsumerState<PdfDetailScreen> {
               ? Center(
                   child: Column(
                     children: [
-                      if(pdfData?.previewImage != null)
-                      Image.network(pdfData!.previewImage!),
-                      if(pdfData?.previewImage != null)
-                        SizedBox(height: 8,),
+                      if (pdfData?.previewImage != null)
+                        Image.network(pdfData!.previewImage!),
+                      if (pdfData?.previewImage != null) SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () {
-                          launchUrl(Uri.parse(url!),);
+                          launchUrl(Uri.parse(url!));
                         },
                         child: Text("View/Download Pdf"),
                       ),
