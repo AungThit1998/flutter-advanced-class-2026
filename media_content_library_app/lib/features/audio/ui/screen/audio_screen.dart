@@ -87,7 +87,7 @@ class _AudioScreenState extends ConsumerState<AudioScreen> {
             Text(
               "There are no audio items available at the moment.",
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant.withOpacity(0.7),
+                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
               ),
               textAlign: TextAlign.center,
             ),
@@ -97,7 +97,13 @@ class _AudioScreenState extends ConsumerState<AudioScreen> {
     }
 
     return ResponsiveLayout(
-      mobile: MobileAudioList(audioList: audioList, colorScheme: colorScheme),
+      mobile: MobileAudioList(
+        audioList: audioList,
+        colorScheme: colorScheme,
+        ref: ref,
+        model: stateModel,
+        audioListProvider: _audioProvider,
+      ),
       desktop: DesktopAudioList(
         audioList: audioList,
         colorScheme: colorScheme,
