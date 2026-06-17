@@ -55,7 +55,7 @@ class _AudioDetailScreenState extends ConsumerState<AudioDetailScreen> {
               type: ApiConst.audio,
               id: widget.id,
               title: title,
-              comments: stateModel.audioData?.comments ,
+              comments: stateModel.audioData?.comments,
             )
           : null,
     );

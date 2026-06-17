@@ -8,6 +8,8 @@ import 'package:media_content_library_app/features/video/ui/widgets/direct_video
 import 'package:media_content_library_app/features/video/ui/widgets/my_youtube_video_player.dart';
 import 'package:media_content_library_app/features/video/ui/widgets/my_youtube_video_player_web.dart';
 
+import '../../../../const/apis/api_const.dart';
+import '../../../../const/widgets/common/comment_floating_action_button.dart';
 import '../../notifiers/video_detail/video_detail_notifier.dart';
 
 class VideoDetailScreen extends ConsumerStatefulWidget {
@@ -19,54 +21,66 @@ class VideoDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _VideoDetailScreenState extends ConsumerState<VideoDetailScreen> {
-  final VideoDetailProvider _provider = VideoDetailProvider(() => VideoDetailNotifier());
+  final VideoDetailProvider _provider = VideoDetailProvider(
+    () => VideoDetailNotifier(),
+  );
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(_provider.notifier).geVideo(widget.id);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     VideoDetailStateModel stateModel = ref.watch(_provider);
+    String? title = stateModel.videoData?.title;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(stateModel.videoData?.title ?? "......"),
-      ),
+      appBar: AppBar(title: Text(stateModel.videoData?.title ?? "......")),
       body: _videoDetailBody(),
+      floatingActionButton: title != null
+          ? CommentFloatingActionButton(
+              type: ApiConst.video,
+              id: widget.id,
+              title: title,
+              comments: stateModel.videoData?.comments,
+            )
+          : null,
     );
   }
-  Widget _videoDetailBody(){
+
+  Widget _videoDetailBody() {
     VideoDetailStateModel stateModel = ref.watch(_provider);
-    if(stateModel.isLoading){
+    if (stateModel.isLoading) {
       return Center(child: CircularProgressIndicator());
-    }
-    else if(stateModel.isError){
-      return TryAgainWidget(onTryAgain: (){
-        ref.read(_provider.notifier).geVideo(widget.id);
-      });
+    } else if (stateModel.isError) {
+      return TryAgainWidget(
+        onTryAgain: () {
+          ref.read(_provider.notifier).geVideo(widget.id);
+        },
+      );
     }
     VideoData? videoData = stateModel.videoData;
-    bool isYoutubeLinkOk = videoData?.source == "youtube" && videoData?.url != null;
+    bool isYoutubeLinkOk =
+        videoData?.source == "youtube" && videoData?.url != null;
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: 500
-        ),
+        constraints: BoxConstraints(maxWidth: 500),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(videoData?.description ?? ""),
             ),
-            if(videoData?.source == "direct" && videoData?.url != null)
+            if (videoData?.source == "direct" && videoData?.url != null)
               DirectVideoPlayer(link: videoData!.url!),
-              if(isYoutubeLinkOk && kIsWeb)
-                MyYoutubeVideoPlayerWeb(url: videoData!.url!),
-              if(isYoutubeLinkOk && !kIsWeb)
+            if (isYoutubeLinkOk && kIsWeb)
+              MyYoutubeVideoPlayerWeb(url: videoData!.url!),
+            if (isYoutubeLinkOk && !kIsWeb)
               MyYoutubeVideoPlayer(url: videoData!.url!),
-        ],),
+          ],
+        ),
       ),
     );
   }

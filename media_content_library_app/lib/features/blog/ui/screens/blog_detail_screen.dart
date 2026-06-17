@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:media_content_library_app/features/comments/data/models/comment_model.dart';
-import 'package:media_content_library_app/features/comments/ui/comment_dialog.dart';
-
 import '../../../../const/widgets/common/comment_floating_action_button.dart';
 import '../../../../const/widgets/web_view/web_view_common.dart';
 import '../../notifiers/blog_detail/blog_detail_notifier.dart';

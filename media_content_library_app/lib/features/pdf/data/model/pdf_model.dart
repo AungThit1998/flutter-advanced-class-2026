@@ -1,3 +1,5 @@
+import '../../../comments/data/models/comment_model.dart';
+
 class PdfModel {
   PdfModel({this.total, this.page, this.limit, this.totalPages, this.data});
 
@@ -72,7 +74,7 @@ class PdfData {
     if (json['comments'] != null) {
       comments = [];
       json['comments'].forEach((v) {
-        comments?.add(Comments.fromJson(v));
+        comments?.add(CommentModel.fromJson(v));
       });
     }
   }
@@ -85,7 +87,7 @@ class PdfData {
   String? fileSize;
   num? pages;
   String? createdAt;
-  List<Comments>? comments;
+  List<CommentModel>? comments;
 
   PdfData copyWith({
     num? id,
@@ -96,7 +98,7 @@ class PdfData {
     String? fileSize,
     num? pages,
     String? createdAt,
-    List<Comments>? comments,
+    List<CommentModel>? comments,
   }) => PdfData(
     id: id ?? this.id,
     type: type ?? this.type,
@@ -126,56 +128,56 @@ class PdfData {
   }
 }
 
-class Comments {
-  Comments({
-    this.id,
-    this.user,
-    this.userId,
-    this.text,
-    this.createdAt,
-    this.isOwn,
-  });
+// class Comments {
+//   Comments({
+//     this.id,
+//     this.user,
+//     this.userId,
+//     this.text,
+//     this.createdAt,
+//     this.isOwn,
+//   });
 
-  Comments.fromJson(dynamic json) {
-    id = json['id'];
-    user = json['user'];
-    userId = json['userId'];
-    text = json['text'];
-    createdAt = json['createdAt'];
-    isOwn = json['isOwn'];
-  }
+//   Comments.fromJson(dynamic json) {
+//     id = json['id'];
+//     user = json['user'];
+//     userId = json['userId'];
+//     text = json['text'];
+//     createdAt = json['createdAt'];
+//     isOwn = json['isOwn'];
+//   }
 
-  num? id;
-  String? user;
-  num? userId;
-  String? text;
-  String? createdAt;
-  bool? isOwn;
+//   num? id;
+//   String? user;
+//   num? userId;
+//   String? text;
+//   String? createdAt;
+//   bool? isOwn;
 
-  Comments copyWith({
-    num? id,
-    String? user,
-    num? userId,
-    String? text,
-    String? createdAt,
-    bool? isOwn,
-  }) => Comments(
-    id: id ?? this.id,
-    user: user ?? this.user,
-    userId: userId ?? this.userId,
-    text: text ?? this.text,
-    createdAt: createdAt ?? this.createdAt,
-    isOwn: isOwn ?? this.isOwn,
-  );
+//   Comments copyWith({
+//     num? id,
+//     String? user,
+//     num? userId,
+//     String? text,
+//     String? createdAt,
+//     bool? isOwn,
+//   }) => Comments(
+//     id: id ?? this.id,
+//     user: user ?? this.user,
+//     userId: userId ?? this.userId,
+//     text: text ?? this.text,
+//     createdAt: createdAt ?? this.createdAt,
+//     isOwn: isOwn ?? this.isOwn,
+//   );
 
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = id;
-    map['user'] = user;
-    map['userId'] = userId;
-    map['text'] = text;
-    map['createdAt'] = createdAt;
-    map['isOwn'] = isOwn;
-    return map;
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     final map = <String, dynamic>{};
+//     map['id'] = id;
+//     map['user'] = user;
+//     map['userId'] = userId;
+//     map['text'] = text;
+//     map['createdAt'] = createdAt;
+//     map['isOwn'] = isOwn;
+//     return map;
+//   }
+// }

@@ -7,6 +7,8 @@ import 'package:media_content_library_app/features/pdf/notifier/pdf_detail/pdf_d
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../const/apis/api_const.dart';
+import '../../../../const/widgets/common/comment_floating_action_button.dart';
 import '../../notifier/pdf_detail/pdf_detail_notifier.dart';
 
 class PdfDetailScreen extends ConsumerStatefulWidget {
@@ -34,9 +36,18 @@ class _PdfDetailScreenState extends ConsumerState<PdfDetailScreen> {
   @override
   Widget build(BuildContext context) {
     PdfDetailStateModel stateModel = ref.watch(_pdfDetailProvider);
+    String? title = stateModel.pdfData?.title;
     return Scaffold(
       appBar: AppBar(title: Text(stateModel.pdfData?.title ?? "......")),
       body: _pdfDetailBody(),
+      floatingActionButton: title != null
+          ? CommentFloatingActionButton(
+              type: ApiConst.pdf,
+              id: widget.id,
+              title: title,
+              comments: stateModel.pdfData?.comments,
+            )
+          : null,
     );
   }
 
