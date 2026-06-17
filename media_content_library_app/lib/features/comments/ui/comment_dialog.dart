@@ -137,11 +137,55 @@ class _CommentDialogWidgetState extends ConsumerState<_CommentDialogWidget> {
               height: 300,
               width: 500,
               child: ListView.builder(
-                itemCount: _comments.length ?? 0,
+                itemCount: _comments.length,
                 itemBuilder: (context, index) {
                   CommentModel comment = _comments[index];
                   return Card(
                     child: ListTile(
+                      trailing:
+                          (comment.isOwn != null && comment.isOwn == false)
+                          ? InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return AlertDialog(
+                                      content: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ListTile(
+                                            onTap: () {
+                                              ref
+                                                  .read(provider.notifier)
+                                                  .editComment(
+                                                    text: "Updated",
+                                                    type: widget.type!,
+                                                    id: widget.id!,
+                                                    commentId: comment.id
+                                                        .toString(),
+                                                  );
+                                            },
+                                            title: Text('Edit'),
+                                            leading: Icon(Icons.edit_outlined),
+                                          ),
+                                          Divider(),
+                                          ListTile(
+                                            title: Text('Delete'),
+                                            leading: Icon(
+                                              Icons.delete_outlined,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Icon(Icons.menu),
+                            )
+                          : null,
                       leading: Icon(Icons.person),
                       title: Text(comment.user ?? ""),
                       subtitle: Text(comment.text ?? ""),

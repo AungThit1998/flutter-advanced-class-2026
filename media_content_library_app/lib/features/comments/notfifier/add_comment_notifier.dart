@@ -4,7 +4,8 @@ import '../data/models/add_comment_response.dart';
 import '../data/service/comment_services.dart';
 import 'add_comment_state_model.dart';
 
-typedef AddCommentProvider = NotifierProvider<AddCommentNotifier,AddCommentStateModel>;
+typedef AddCommentProvider =
+    NotifierProvider<AddCommentNotifier, AddCommentStateModel>;
 
 class AddCommentNotifier extends Notifier<AddCommentStateModel> {
   final CommentServices _services = CommentServices();
@@ -31,6 +32,66 @@ class AddCommentNotifier extends Notifier<AddCommentStateModel> {
         text: text,
         type: type,
         id: id,
+      );
+      state = state.copyWith(
+        isLoading: false,
+        addCommentResponse: addCommentResponse,
+        isSuccess: true,
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false, isFailed: true);
+    }
+  }
+
+  void editComment({
+    required String text,
+    required String type,
+    required String id,
+    required String commentId,
+  }) async {
+    try {
+      state = state.copyWith(
+        isLoading: true,
+        isSuccess: false,
+        isFailed: false,
+        isFormState: false,
+        addCommentResponse: null,
+      );
+      AddCommentResponse addCommentResponse = await _services.editComment(
+        text: text,
+        type: type,
+        id: id,
+        commentId: commentId,
+      );
+      state = state.copyWith(
+        isLoading: false,
+        addCommentResponse: addCommentResponse,
+        isSuccess: true,
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false, isFailed: true);
+    }
+  }
+
+  void deleteComment({
+    required String text,
+    required String type,
+    required String id,
+    required String commentId,
+  }) async {
+    try {
+      state = state.copyWith(
+        isLoading: true,
+        isSuccess: false,
+        isFailed: false,
+        isFormState: false,
+        addCommentResponse: null,
+      );
+      AddCommentResponse addCommentResponse = await _services.deleteComment(
+        text: text,
+        type: type,
+        id: id,
+        commentId: commentId,
       );
       state = state.copyWith(
         isLoading: false,

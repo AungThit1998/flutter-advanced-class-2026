@@ -26,4 +26,42 @@ class CommentServices {
       throw Exception("User Not Logged in");
     }
   }
+
+  Future<AddCommentResponse> editComment({
+    required String text,
+    required String type,
+    required String id,
+    required String commentId,
+  }) async {
+    String? token = await _userSession.getToken();
+    if (token?.isNotEmpty == true) {
+      _dio.options.headers = {"Authorization": "Bearer $token"};
+      final response = await _dio.put(
+        ApiConst.editComment(type, id, commentId),
+        data: {"text": text},
+      );
+      return AddCommentResponse.fromJson(response.data);
+    } else {
+      throw Exception("User Not Logged in");
+    }
+  }
+
+  Future<AddCommentResponse> deleteComment({
+    required String text,
+    required String type,
+    required String id,
+    required String commentId,
+  }) async {
+    String? token = await _userSession.getToken();
+    if (token?.isNotEmpty == true) {
+      _dio.options.headers = {"Authorization": "Bearer $token"};
+      final response = await _dio.delete(
+        ApiConst.deleteComment(type, id, commentId),
+        data: {"text": text},
+      );
+      return AddCommentResponse.fromJson(response.data);
+    } else {
+      throw Exception("User Not Logged in");
+    }
+  }
 }

@@ -8,8 +8,16 @@ class ApiConst {
   static const signUp = "auth/signup";
   static const signIn = "auth/login";
 
-  static String addComment(String type, String id){
+  static String addComment(String type, String id) {
     return "content/$type/$id/comments";
+  }
+
+  static String editComment(String type, String id, String commentId) {
+    return "content/$type/$id/comments/:$commentId";
+  }
+
+  static String deleteComment(String type, String id, String commentId) {
+    return "content/$type/$id/comments/:$commentId";
   }
 
   ApiConst._();
