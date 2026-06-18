@@ -6,7 +6,6 @@ import 'package:media_content_library_app/features/auth/notifier/sign_up/sign_up
 import 'package:media_content_library_app/features/auth/notifier/sign_up/sign_up_state_model.dart';
 import 'package:media_content_library_app/features/auth/notifier/sign_up_otp/otp_notifier.dart';
 import 'package:media_content_library_app/features/auth/notifier/sign_up_otp/otp_state_model.dart';
-
 import '../../../../const/di/locator.dart';
 import '../../../settings/notifier/profile_notifier.dart';
 
@@ -30,7 +29,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(_profileProvider.notifier).checkAuth();
     });
   }
@@ -39,15 +38,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget build(BuildContext context) {
     OtpStateModel otpStateModel = ref.watch(_otpProvider);
     SignUpStateModel signUpStateModel = ref.watch(_signupProvider);
-    ref.listen(_profileProvider, (oldState, newState){
-      if(newState.token?.isNotEmpty == true){
+    ref.listen(_profileProvider, (oldState, newState) {
+      if (newState.token?.isNotEmpty == true) {
         context.go("/");
       }
     });
-    ref.listen(_signupProvider, (oldState,newState) async{
-      if(newState.isSuccess && newState.signUpModel?.token?.isNotEmpty== true){
+    ref.listen(_signupProvider, (oldState, newState) async {
+      if (newState.isSuccess &&
+          newState.signUpModel?.token?.isNotEmpty == true) {
         await Future.delayed(Duration(seconds: 1));
-        if(context.mounted) {
+        if (context.mounted) {
           ref.read(_profileProvider.notifier).checkAuth();
           context.go("/settings");
         }
@@ -198,16 +198,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               );
                         }
                       },
-                      child: Text("Sing up"),
+                      child: Text("Sign Up"),
                     ),
                   ],
                 ),
               ),
             ),
-          if(signUpStateModel.isSuccess)
-            Center(
-              child: Text("Signup Success"),
-            )
+          if (signUpStateModel.isSuccess) Center(child: Text("Signup Success")),
         ],
       ),
     );

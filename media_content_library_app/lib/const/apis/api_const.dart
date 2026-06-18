@@ -13,11 +13,11 @@ class ApiConst {
   }
 
   static String editComment(String type, String id, String commentId) {
-    return "content/$type/$id/comments/:$commentId";
+    return "content/$type/$id/comments/$commentId";
   }
 
   static String deleteComment(String type, String id, String commentId) {
-    return "content/$type/$id/comments/:$commentId";
+    return "content/$type/$id/comments/$commentId";
   }
 
   ApiConst._();

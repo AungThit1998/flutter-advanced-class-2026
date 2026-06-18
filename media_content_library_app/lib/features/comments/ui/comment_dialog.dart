@@ -6,6 +6,7 @@ import '../data/models/add_comment_response.dart';
 import '../data/models/comment_model.dart';
 import '../notfifier/add_comment_notifier.dart';
 import '../notfifier/add_comment_state_model.dart';
+import '../notfifier/edit_delete_comment_notifier.dart';
 
 void showCommentDialog({
   required BuildContext context,
@@ -27,9 +28,184 @@ void showCommentDialog({
   );
 }
 
+Future<({bool isDeleted, String? editedText})?> showUpdateDeleteDialog({
+  required BuildContext context,
+  required String? type,
+  required String? id,
+  required CommentModel comment,
+}) {
+  return showDialog<({bool isDeleted, String? editedText})>(
+    context: context,
+    builder: (context) {
+      return _UpdateDeleteDialog(type: type, id: id, comment: comment);
+    },
+  );
+}
+
+class _UpdateDeleteDialog extends ConsumerStatefulWidget {
+  final String? type;
+  final String? id;
+  final CommentModel? comment;
+  const _UpdateDeleteDialog({
+    required this.type,
+    required this.id,
+    required this.comment,
+  });
+
+  @override
+  ConsumerState<_UpdateDeleteDialog> createState() =>
+      _UpdateDeleteDialogState();
+}
+
+class _UpdateDeleteDialogState extends ConsumerState<_UpdateDeleteDialog> {
+  late TextEditingController _editController;
+  bool _isEditing = false;
+  bool _isDeleting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _editController = TextEditingController(text: widget.comment?.text ?? '');
+  }
+
+  @override
+  void dispose() {
+    _editController.dispose();
+    super.dispose();
+  }
+
+  void _editComment() {
+    if (_editController.text.trim().isEmpty) return;
+    _isDeleting = false;
+    ref
+        .read(editDeleteCommentProvider.notifier)
+        .editComment(
+          text: _editController.text.trim(),
+          type: widget.type!,
+          id: widget.id!,
+          commentId: widget.comment?.id.toString() ?? '',
+        );
+  }
+
+  void _deleteComment() {
+    _isDeleting = true;
+    ref
+        .read(editDeleteCommentProvider.notifier)
+        .deleteComment(
+          type: widget.type!,
+          id: widget.id!,
+          commentId: widget.comment?.id.toString() ?? '',
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(editDeleteCommentProvider);
+
+    ref.listen(editDeleteCommentProvider, (previous, next) {
+      if (previous?.isLoading == true && next.isSuccess) {
+        if (_isDeleting) {
+          Navigator.pop(context, (isDeleted: true, editedText: null));
+        } else {
+          Navigator.pop(context, (
+            isDeleted: false,
+            editedText: _editController.text.trim(),
+          ));
+        }
+      }
+      if (previous?.isLoading == true && next.isFailed) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Something went wrong. Please try again.'),
+            actions: [
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    });
+
+    if (_isEditing) {
+      return AlertDialog(
+        title: const Text('Edit Comment'),
+        content: TextField(
+          controller: _editController,
+          maxLines: 3,
+          decoration: const InputDecoration(
+            labelText: 'Update your comment',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => setState(() => _isEditing = false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: state.isLoading ? null : _editComment,
+            child: state.isLoading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('Save'),
+          ),
+        ],
+      );
+    }
+
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            onTap: () => setState(() => _isEditing = true),
+            title: const Text('Edit'),
+            leading: const Icon(Icons.edit_outlined),
+          ),
+          const Divider(),
+          ListTile(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: const Text('Delete Comment'),
+                  content: const Text(
+                    'Are you sure you want to delete this comment?',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Cancel'),
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        _deleteComment();
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            title: const Text('Delete'),
+            leading: const Icon(Icons.delete_outlined),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _CommentDialogWidget extends ConsumerStatefulWidget {
   const _CommentDialogWidget({
-    super.key,
     required this.type,
     required this.id,
     required this.title,
@@ -107,6 +283,7 @@ class _CommentDialogWidgetState extends ConsumerState<_CommentDialogWidget> {
               userId: model.userId,
               createdAt: model.createdAt,
               text: model.text,
+              isOwn: true,
             ),
           );
         });
@@ -142,46 +319,33 @@ class _CommentDialogWidgetState extends ConsumerState<_CommentDialogWidget> {
                   CommentModel comment = _comments[index];
                   return Card(
                     child: ListTile(
-                      trailing:
-                          (comment.isOwn != null && comment.isOwn == false)
+                      trailing: (comment.isOwn != null && comment.isOwn == true)
                           ? InkWell(
-                              onTap: () {
-                                showDialog(
+                              onTap: () async {
+                                final result = await showUpdateDeleteDialog(
+                                  comment: comment,
+                                  type: widget.type,
+                                  id: widget.id,
                                   context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      content: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ListTile(
-                                            onTap: () {
-                                              ref
-                                                  .read(provider.notifier)
-                                                  .editComment(
-                                                    text: "Updated",
-                                                    type: widget.type!,
-                                                    id: widget.id!,
-                                                    commentId: comment.id
-                                                        .toString(),
-                                                  );
-                                            },
-                                            title: Text('Edit'),
-                                            leading: Icon(Icons.edit_outlined),
-                                          ),
-                                          Divider(),
-                                          ListTile(
-                                            title: Text('Delete'),
-                                            leading: Icon(
-                                              Icons.delete_outlined,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
                                 );
+                                if (result != null) {
+                                  setState(() {
+                                    if (result.isDeleted) {
+                                      _comments.removeWhere(
+                                        (c) => c.id == comment.id,
+                                      );
+                                    } else if (result.editedText != null) {
+                                      final i = _comments.indexWhere(
+                                        (c) => c.id == comment.id,
+                                      );
+                                      if (i != -1) {
+                                        _comments[i] = comment.copyWith(
+                                          text: result.editedText,
+                                        );
+                                      }
+                                    }
+                                  });
+                                }
                               },
                               child: Icon(Icons.menu),
                             )
